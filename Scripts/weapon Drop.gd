@@ -29,8 +29,14 @@ func _ready():
 func update():
 	pass
 
+
 func interact():
 	Global.weaponManager.addWeapon(weaponPath, defaultStats, clip, reserve)
+	deleteWeaponDrop()
+	rpc("deleteWeaponDrop")
+
+@rpc("any_peer")
+func deleteWeaponDrop():
 	queue_free()
 
 func setWeapon(path):

@@ -69,6 +69,7 @@ func _ready():
 		return
 	CAMERA_CONTROLLER.make_current()
 	position = get_node("/root/World/Spawnpoint").position
+	velocity = Vector3(0, 0, 0)
 	Global.player = self
 	Global.playerCamera = CAMERA_CONTROLLER
 	# Get mouse input
@@ -119,6 +120,9 @@ func updateVelocity() -> void:
 
 @rpc("any_peer")
 func take_damage(damage, type):
-	print("TAKEN DAMAGE OOOOH NOOO")
 	Global.playerHealth -= damage
 	Global.updateHealth()
+	if Global.playerHealth <= 0:
+		position = get_node("/root/World/Spawnpoint").position
+		velocity = Vector3(0, 0, 0)
+		Global.playerHealth = 100

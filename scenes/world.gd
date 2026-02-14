@@ -61,8 +61,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta):
-	if tracked:
-		get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
+	pass
+	#if tracked:
+		#get_tree().call_group("enemy", "update_target_location", player.global_transform.origin)
 
 func _unhandled_input(event):
 	if Input.is_action_just_pressed("quit"):

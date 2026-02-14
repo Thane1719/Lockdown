@@ -13,16 +13,16 @@ size = Vector3(0.75, 0.75, 0.25)
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nwd1n"]
 properties/0/path = NodePath("Weapon:position")
 properties/0/spawn = true
-properties/0/replication_mode = 2
+properties/0/replication_mode = 1
 properties/1/path = NodePath("Weapon:rotation")
 properties/1/spawn = true
-properties/1/replication_mode = 2
+properties/1/replication_mode = 1
 properties/2/path = NodePath(".:position")
 properties/2/spawn = true
-properties/2/replication_mode = 2
+properties/2/replication_mode = 1
 properties/3/path = NodePath(".:rotation")
 properties/3/spawn = true
-properties/3/replication_mode = 2
+properties/3/replication_mode = 1
 
 [node name="WeaponDrop" type="RigidBody3D" unique_id=2097301339 groups=["InteractableObject"]]
 collision_layer = 2

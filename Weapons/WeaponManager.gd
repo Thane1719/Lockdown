@@ -71,6 +71,7 @@ func _input(event):
 	
 	if Input.is_action_just_pressed("dropWeapon"):
 		dropWeapon()
+		
 	
 	if event is InputEventMouseMotion:
 		weaponGlobal.mouseMovement = event.relative
@@ -382,22 +383,42 @@ func removeHitMark(Instance):
 	await get_tree().create_timer(weaponGlobal.rng.randi_range(4, 12)).timeout
 	Instance.queue_free()
 
+
 func dropWeapon():
 	if weaponType != load("res://Weapons/Empty Weapon.tres"):
+		var currentWeapon = weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex]
+		var currentClip = weaponGlobal.clipAmmo
+		var currentReserve = weaponGlobal.reserveAmmo
 		var dropInstance = weaponDrop.instantiate()
-		dropInstance.global_transform = bulletSpawnPoint.global_transform
+		var dropVel = Vector3(0,0,0)
 		get_tree().get_root().add_child(dropInstance)
-		dropInstance.setWeapon(weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex])
-		dropInstance.setModel(weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex])
-		dropInstance.parseAmmo(weaponGlobal.clipAmmo, weaponGlobal.reserveAmmo)
-		if weaponType == load("res://Weapons/Soul Knife.tres"):
-			dropInstance.changeVel(-Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 20))
-		else:
-			dropInstance.changeVel(-Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 12))
-		weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex] = null
-		loadWeapon()
+		dropInstance.global_position = bulletSpawnPoint.global_position
+		dropInstance.setWeapon(currentWeapon)
+		dropInstance.setModel(currentWeapon)
+		dropInstance.parseAmmo(currentClip, currentReserve)
 		
+		if weaponType == load("res://Weapons/Soul Knife.tres"):
+			dropVel = -Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 20)
+			dropInstance.changeVel(dropVel)
+		else:
+			dropVel = -Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 12)
+			dropInstance.changeVel(dropVel)
+			
+		if weaponType != load("res://Weapons/Empty Weapon.tres"):
+			weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex] = null
+			loadWeapon()
 
+		rpc("replicateDroppedWeapon", str(currentWeapon), currentClip, currentReserve, dropInstance.global_position, dropVel)
+
+@rpc("any_peer")
+func replicateDroppedWeapon(weapon, clip, reserve, dropPos, dropVel):
+	var dropInstance = weaponDrop.instantiate()
+	dropInstance.global_position = dropPos
+	get_tree().get_root().add_child(dropInstance)
+	dropInstance.setWeapon(weapon)
+	dropInstance.setModel(weapon)
+	dropInstance.parseAmmo(clip, reserve)
+	dropInstance.changeVel(dropVel)
 
 
 func addAmmo(clipAdd, reserveAdd):
