@@ -43,7 +43,7 @@ class_name WeaponController
 
 @export var weaponAnimationPlayer : AnimationPlayer
 
-var weaponDrop = preload("res://Scenes/Weapon Drop.tscn")
+var weaponDrop = preload("res://scenes/Weapon Drop.tscn")
 
 
 

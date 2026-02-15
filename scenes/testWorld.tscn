@@ -114,7 +114,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="Reticle" type="CenterContainer" parent="UserInterface" unique_id=949750882 node_paths=PackedStringArray("reticleLines", "playerController")]
+[node name="Reticle" type="CenterContainer" parent="UserInterface" unique_id=949750882 node_paths=PackedStringArray("reticleLines")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -129,7 +129,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_0ddhe")
 reticleLines = [NodePath("Top"), NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
-playerController = NodePath("")
 
 [node name="Top" type="Line2D" parent="UserInterface/Reticle" unique_id=1732098349]
 position = Vector2(20, 20)

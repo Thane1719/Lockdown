@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Items" format=3 uid="uid://dcuyg4hleq8sf"]
+
+[ext_resource type="Script" uid="uid://bdpt5wu6eix57" path="res://Weapons/Item.gd" id="1_0lwjj"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_0lwjj"]
+
+[resource]
+script = ExtResource("1_0lwjj")
+name = &"Gold Bar"
+mesh = SubResource("PrismMesh_0lwjj")
+metadata/_custom_type_script = "uid://bdpt5wu6eix57"

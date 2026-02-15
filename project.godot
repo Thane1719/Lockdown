@@ -21,6 +21,14 @@ config/icon="uid://el1jrwdua5i0"
 Global="*uid://fpoxeuvyuyg5"
 weaponGlobal="*uid://dv1ap210n0c1r"
 
+[dotnet]
+
+project/assembly_name="MultiplayerFPSTemplate"
+
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 ui_accept={
