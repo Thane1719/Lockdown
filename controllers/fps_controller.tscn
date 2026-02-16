@@ -4,7 +4,10 @@
 [ext_resource type="Material" uid="uid://b4gwd5h7ixvct" path="res://controllers/materials/player.tres" id="2_gldw4"]
 [ext_resource type="PackedScene" uid="uid://csj7vcqrenjsi" path="res://Weapons/Weapon.tscn" id="3_eikvl"]
 [ext_resource type="Script" uid="uid://chelsy2m60l2o" path="res://controllers/scripts/interaction_cast.gd" id="4_tg6sc"]
+[ext_resource type="Resource" uid="uid://sc0678yoejno" path="res://Weapons/Blaster.tres" id="4_yvtcv"]
+[ext_resource type="ArrayMesh" uid="uid://0tohxaimc3a8" path="res://Weapons/Models/Pistol/MX1 Blaster.res" id="5_h7h5r"]
 [ext_resource type="Script" uid="uid://dkk1lhseynn15" path="res://controllers/scripts/State Machine/stateMachine.gd" id="6_co0pi"]
+[ext_resource type="ArrayMesh" uid="uid://ohf0bdys7dha" path="res://Weapons/Models/Pistol/Magazine.res" id="6_fdopr"]
 [ext_resource type="Script" uid="uid://dd8ov1iyaklk5" path="res://controllers/scripts/State Machine/idle_player_state.gd" id="7_gshig"]
 [ext_resource type="Script" uid="uid://dv2uyfesuk4fh" path="res://controllers/scripts/State Machine/walking_player_state.gd" id="8_jmoha"]
 [ext_resource type="Script" uid="uid://7oev0hm280x0" path="res://controllers/scripts/State Machine/spriting_player_state.gd" id="9_bneyr"]
@@ -914,17 +917,24 @@ fov = 90.0
 [node name="WeaponRig" type="Node3D" parent="CameraController/Camera3D" unique_id=898275078]
 
 [node name="Weapon" parent="CameraController/Camera3D/WeaponRig" unique_id=606798246 node_paths=PackedStringArray("weaponAnimationPlayer") instance=ExtResource("3_eikvl")]
-transform = Transform3D(14, -2.84214e-14, -1.02885183e-19, 0, -5.067986e-05, 14, -2.84214e-14, -14, -5.067986e-05, 0.25, -0.4, -0.5)
+transform = Transform3D(12, -2.43612e-14, -8.81873e-20, 0, -4.3439883e-05, 12, -2.43612e-14, -12, -4.3439883e-05, 0.25, -0.4, -0.5)
+weaponType = ExtResource("4_yvtcv")
 weaponAnimationPlayer = NodePath("../weaponAnimations")
 
 [node name="WeaponMesh" parent="CameraController/Camera3D/WeaponRig/Weapon" index="0" unique_id=192297091]
 transform = Transform3D(1, 2.11758e-22, 6.31089e-30, 0, 1, 3.55271e-15, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("5_h7h5r")
 
 [node name="WeaponMagazine" parent="CameraController/Camera3D/WeaponRig/Weapon" index="1" unique_id=1020052104]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.01)
+mesh = ExtResource("6_fdopr")
 
 [node name="WeaponBolt" parent="CameraController/Camera3D/WeaponRig/Weapon" index="2" unique_id=100677615]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.01)
+mesh = null
+
+[node name="WeaponShadow" parent="CameraController/Camera3D/WeaponRig/Weapon" index="3" unique_id=1117034354]
+mesh = ExtResource("5_h7h5r")
 
 [node name="weaponAnimations" type="AnimationPlayer" parent="CameraController/Camera3D/WeaponRig" unique_id=165500380]
 libraries/ = SubResource("AnimationLibrary_uke7a")
