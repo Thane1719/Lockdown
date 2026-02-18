@@ -14,7 +14,7 @@ var weaponBobAmount : Vector2 = Vector2(0,0)
 var weaponBulletPhysics
 var weaponBulletScene
 
-var currentWeaponPath
+#var currentWeaponPath
 
 
 var reserveAmmo:
