@@ -22,3 +22,6 @@ func _physics_process(delta):
 	velocity = new_veloicty
 	
 	move_and_slide()
+
+func take_enemy_damage(ammount, type):
+	print("mrsandbag is ouch")

@@ -292,8 +292,11 @@ func shoot() -> void:
 			else:
 				#Single hitscan shot
 				var hitBody = castBulletRay()
-				if hitBody and hitBody.has_method("take_damage"):
-					hitBody.take_damage.rpc_id(hitBody.get_multiplayer_authority(), weaponType.Damage, "bullet")  # Deal damage to the enemy
+				if hitBody and hitBody.has_method("take_damage") or hitBody.has_method("take_enemy_damage"):
+					if hitBody.has_method("take_enemy_damage"):
+						hitBody.take_enemy_damage(weaponType.Damage, "bullet")
+					else:
+						hitBody.take_damage.rpc_id(hitBody.get_multiplayer_authority(), weaponType.Damage, "bullet")  # Deal damage to the enemy
 
 		#If the weapon is a projectile weapon then shoot a projectile not a raycast
 		if weaponGlobal.weaponBulletPhysics == "Projectile":
