@@ -86,7 +86,8 @@ func _physics_process(delta):
 	if not is_multiplayer_authority(): return
 	# Update camera movement based on mouse movement
 	_update_camera(delta)
-
+	
+	Global.debug.addProperty("Speed", get_real_velocity().length(), 2)
 	Global.debug.addProperty("Stamina", stamina, 2)
 	if stamina < 101 and stateMachine.currentState != $PlayerStateMachine/SprintingPlayerState:
 		stamina += ceil(16.5 * delta)
