@@ -9,6 +9,7 @@ extends Node
 #@onready var Player = $Player
 var tracked = false
 var player
+var teams = {} # peer_id -> "Cop" or "Robber"
 
 
 const PORT = 9999
@@ -25,7 +26,7 @@ func _on_host_button_pressed():
 	multiplayer.peer_disconnected.connect(remove_player)
 	
 	add_player(multiplayer.get_unique_id())
-	print  ("getuniqueid is " + str(multiplayer.get_unique_id()))
+	
 	#upnp_setup()
 func _on_join_button_pressed():
 	main_menu.hide()
@@ -72,16 +73,18 @@ func _unhandled_input(event):
 func _on_single_player_button_pressed():
 	main_menu.hide()
 	hud.show()
+	var my_id = multiplayer.get_unique_id()
 	#multiplayer.multiplayer_peer = enet_peer
-	add_player(multiplayer.get_unique_id())
+	add_player(my_id)
+	
 
 
 func add_player(peer_id):
 	player = Player.instantiate()
 	player.name = str(peer_id)
 	add_child(player)
+	assign_team(peer_id)
 	tracked = true
-	print (str(peer_id) + " has joined")
 	#if player.is_multiplayer_authority():
 		#player.health_changed.connect(update_health_bar)
 
@@ -89,3 +92,38 @@ func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
+
+func assign_team(id):
+	if !multiplayer.is_server():
+		return
+		
+	var cop_count = 0
+	var robber_count = 0
+	
+	for t in teams.values():
+		if t == "Cop":
+			cop_count += 1
+		elif t == "Robber":
+			robber_count += 1
+
+	var team
+	# Keep teams balanced first
+	if cop_count > robber_count:
+		team = "Robber"
+	elif robber_count > cop_count:
+		team = "Cop"
+	else:
+		# If equal, randomly assign
+		team = "Cop" if randi() % 2 == 0 else "Robber"
+	teams[id] = team
+	print("Player ", id, " assigned to ", team)
+	rpc("receive_team_assignment", id, team)
+
+
+@rpc("any_peer", "reliable")
+func receive_team_assignment(id, team):
+	teams[id] = team
+	print("Synced: Player ", id, " is ", team)
+	# If this is me, confirm team locally
+	if id == multiplayer.get_unique_id():
+		print("I am on team: ", team)

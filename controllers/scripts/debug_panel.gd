@@ -5,25 +5,20 @@ var property
 @onready var property_container = %VBoxContainer
 
 func _ready():
-	if not is_multiplayer_authority(): return
 	visible = false
 	Global.debug = self
 	
 
 func _process(delta):
-	if not is_multiplayer_authority(): return
 	if visible:
 		addProperty("FPS", framesPerSecond, 1)
 		framesPerSecond = "%.2f" % (1.0/delta)
 
 func _input(event):
-	if not is_multiplayer_authority(): return
-	#toggle Debug Menu
 	if event.is_action_pressed("debug"):
 		visible = !visible
 
 func addProperty(title: String, value, order):
-	if not is_multiplayer_authority(): return
 	var target
 	target = property_container.find_child(title,true,false)
 	if !target:

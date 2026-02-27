@@ -2,7 +2,7 @@ class_name JumpingPlayerState
 
 extends PlayerMovementState
 
-@export var speed: float = 3.0
+@export var speed: float = 8.0
 @export var acceleration : float = 0.1
 @export var deceleration : float = 0.25
 @export var jumpVelocity : float = 6
