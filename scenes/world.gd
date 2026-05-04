@@ -84,6 +84,7 @@ func _ready() -> void:
 	Global.pointsLabel = %Points
 	Global.healthLabel = %Health
 	GUI.hide()
+	print(Input.get_joy_name(0))
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):

@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 @export var JUMP_VELOCITY : float = 4.5
 @export var MOUSE_SENSITIVITY : float = 0.5
+@export var controllerSensitivity = 2
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 
@@ -61,7 +62,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
 
-
 func _input(event):
 
 	if not is_multiplayer_authority():
@@ -116,7 +116,24 @@ func _physics_process(delta):
 		#velocity.y -= gravity * delta
 	CAMERA_CONTROLLER.rotation = lerp(CAMERA_CONTROLLER.rotation, CAMERA_CONTROLLER.rotation + cameraOffset, 0.1)
 	cameraOffset = lerp(cameraOffset, Vector3(0,0,0), 0.05)
-	
+
+
+	if _mouse_input:
+		return 
+
+	var joy_rot = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)
+	var joy_tilt = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
+
+	# Apply deadzone to prevent drift
+	if abs(joy_rot) > 0.1:
+		_rotation_input = -joy_rot * controllerSensitivity
+	else:
+		_rotation_input = 0.0
+
+	if abs(joy_tilt) > 0.1:
+		_tilt_input = -joy_tilt * controllerSensitivity
+	else:
+		_tilt_input = 0.0
 
 func updateGravity(delta) -> void:
 

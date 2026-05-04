@@ -63,17 +63,18 @@ func _ready() -> void:
 	Global.reserveLabel.text = str(weaponGlobal.reserveAmmo)
 	
 func _input(event):
-	if not is_multiplayer_authority(): return
-	if event.is_action_pressed("weaponDown"):
-		if !weaponAnimationPlayer.is_playing():
-			switchWeapon(1)
+	if !Engine.is_editor_hint():
+		if not is_multiplayer_authority(): return
+		if event.is_action_pressed("weaponDown"):
+			if !weaponAnimationPlayer.is_playing():
+				switchWeapon(1)
 
-	if event.is_action_pressed("weaponUp"):
-		if !weaponAnimationPlayer.is_playing():
-			switchWeapon(-1)
-	
-	if Input.is_action_just_pressed("dropWeapon"):
-		dropWeapon()
+		if event.is_action_pressed("weaponUp"):
+			if !weaponAnimationPlayer.is_playing():
+				switchWeapon(-1)
+		
+		if Input.is_action_just_pressed("dropWeapon"):
+			dropWeapon()
 		
 	
 	if event is InputEventMouseMotion:
@@ -284,7 +285,7 @@ func getSwayNoise() -> float:
 #When left click, this function is typically called to initiate a shot
 func shoot() -> void:
 	#First check if the weapon is not an empty weapon, that you can shoot and you have ammo
-	if weaponGlobal.clipAmmo != 0 and weaponGlobal.canShoot == true and weaponType != load("res://Weapons/Empty Weapon.tres"):
+	if weaponGlobal.clipAmmo > 0 and weaponGlobal.canShoot == true and weaponType != load("res://Weapons/Empty Weapon.tres"):
 		weaponGlobal.canShoot = false  # Prevent further shooting
 		weaponGlobal.cooldown_timer = weaponGlobal.time_per_shot  # Reset the cooldown timer
 		#If hitscan, runs the hitscan method
@@ -335,10 +336,9 @@ func shoot() -> void:
 			await weaponAnimationPlayer.animation_finished
 	
 	#Reloads the gun if you attempt to shoot with an empty clip, but avaliable reserve ammo
-	elif weaponGlobal.reserveAmmo > 0 and weaponGlobal.clipAmmo == 0:
-		await weaponAnimationPlayer.animation_finished
-		reloadWeapon()
-		return
+		if weaponGlobal.reserveAmmo > 0 and weaponGlobal.clipAmmo == 0:
+			await weaponAnimationPlayer.animation_finished
+			reloadWeapon()
 
 #Functions to create and test a raycast for hitting another player or enemy
 func castBulletRay():
@@ -416,9 +416,7 @@ func _process(delta: float) -> void:
 			weaponGlobal.canShoot = true  # Allow shooting once the cooldown ends
 			if weaponGlobal.fireMode == "Auto" and Input.is_action_pressed("shoot"):
 				shoot()
-		
-		
-	if !Engine.is_editor_hint():
+
 		if Input.is_action_just_pressed("reload") and weaponGlobal.clipAmmo != weaponGlobal.maxClipAmmo:
 			reloadWeapon()
 
@@ -432,34 +430,35 @@ func removeHitMark(Instance):
 #This runs when you or the system attempts you drop a weapon from you
 func dropWeapon():
 	#Only runs if you are holding a weapon
-	if weaponType != load("res://Weapons/Empty Weapon.tres"):
-		#Create references to the current weapons stats
-		var currentWeapon = weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex]
-		var currentClip = weaponGlobal.clipAmmo
-		var currentReserve = weaponGlobal.reserveAmmo
-		#Dropped weapon instance and velocity, adds it to the tree and calls
-		#functions on the dropped weapon to load the correct stats
-		#Loading the correct stats on the weapon drop allows a dropped weapon to retain stats
-		var dropInstance = weaponDrop.instantiate()
-		var dropVel = Vector3(0,0,0)
-		get_tree().get_root().add_child(dropInstance)
-		dropInstance.global_position = bulletSpawnPoint.global_position
-		dropInstance.setWeapon(currentWeapon)
-		dropInstance.setModel(currentWeapon)
-		dropInstance.setTeam(Global.myCurrentTeam)
-		dropInstance.parseAmmo(currentClip, currentReserve)
-		weaponGlobal.inventoryWeight -= weaponType.weight
-		
-		dropVel = -Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 12)
-		dropInstance.changeVel(dropVel)
-		
-		#Fall back incase after you drop the weapon is not an empty weapon
+	if !Engine.is_editor_hint():
 		if weaponType != load("res://Weapons/Empty Weapon.tres"):
-			weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex] = "res://Weapons/Empty Weapon.tres"
-			loadWeapon()
+			#Create references to the current weapons stats
+			var currentWeapon = weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex]
+			var currentClip = weaponGlobal.clipAmmo
+			var currentReserve = weaponGlobal.reserveAmmo
+			#Dropped weapon instance and velocity, adds it to the tree and calls
+			#functions on the dropped weapon to load the correct stats
+			#Loading the correct stats on the weapon drop allows a dropped weapon to retain stats
+			var dropInstance = weaponDrop.instantiate()
+			var dropVel = Vector3(0,0,0)
+			get_tree().get_root().add_child(dropInstance)
+			dropInstance.global_position = bulletSpawnPoint.global_position
+			dropInstance.setWeapon(currentWeapon)
+			dropInstance.setModel(currentWeapon)
+			dropInstance.setTeam(Global.myCurrentTeam)
+			dropInstance.parseAmmo(currentClip, currentReserve)
+			weaponGlobal.inventoryWeight -= weaponType.weight
+			
+			dropVel = -Global.playerCamera.global_transform.basis.z.normalized() * (Global.player.velocity.length() + 12)
+			dropInstance.changeVel(dropVel)
+			
+			#Fall back incase after you drop the weapon is not an empty weapon
+			if weaponType != load("res://Weapons/Empty Weapon.tres"):
+				weaponGlobal.weaponInventory[weaponGlobal.currentWeaponIndex] = "res://Weapons/Empty Weapon.tres"
+				loadWeapon()
 
-		#Replicates the drop to the other players on the server
-		rpc("replicateDroppedWeapon", str(currentWeapon), currentClip, currentReserve, dropInstance.global_position, dropVel, Global.myCurrentTeam)
+			#Replicates the drop to the other players on the server
+			rpc("replicateDroppedWeapon", str(currentWeapon), currentClip, currentReserve, dropInstance.global_position, dropVel, Global.myCurrentTeam)
 
 #This function is for when another player drops their weapon
 #This creates a version on your side that has the same stats
