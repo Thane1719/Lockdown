@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8oqxmm2w2wvv"]
 
-[ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scenes/world.gd" id="1_ctiuy"]
+[ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scripts/lobby.gd" id="1_ctiuy"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://Scenes/environment.tscn" id="2_fr3vy"]
 [ext_resource type="AudioStream" uid="uid://dbwy7vdmgmifi" path="res://Scenes/starostin-crime-heist-investigation-music-259668.mp3" id="3_8b5ia"]
 [ext_resource type="Script" uid="uid://cw5iw0tdrx43u" path="res://gameMechanics/guitasktest.gd" id="3_ftq4a"]

@@ -18,7 +18,7 @@ func _ready() -> void:
 
 func spawnItem():
 	var dropInstance = weaponDrop.instantiate()
-	get_tree().get_root().add_child(dropInstance)
+	get_tree().root.get_node("World").add_child(dropInstance)
 	var loadedItem = itemPaths[rng.randi_range(0, itemPaths.size()-1)]
 	dropInstance.global_position = dropLocation.global_position
 	dropInstance.setWeapon(loadedItem)

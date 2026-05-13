@@ -25,6 +25,7 @@ var myCurrentTeam : String
 var totalValue = 0
 
 var taskMode = false
+
 func updateLabels(clipAmmo, reserveAmmo):
 	clipLabel.text = str(clipAmmo)
 	reserveLabel.text = str(reserveAmmo)
@@ -63,6 +64,19 @@ func replicateSpecificObject(bodyName, function, arg1):
 	else:
 		object.call(function)
 	
+func changeScene(sceneString):
+	var players = get_tree().get_nodes_in_group("player")
+	for player in players:
+		player.reparent(get_tree().root, false)
+	get_tree().change_scene_to_file(sceneString)
+	players = get_tree().get_nodes_in_group("player")
+	for player in players:
+		player.reparent(get_tree().root.get_node("World"), false)
+	#Recursivley gather all players and move them to root node
+	#Change Scene
+	#Move them back in
+	
+	
 
 #This function is for adding things to in game debug menu
 #Format:
@@ -70,3 +84,8 @@ func replicateSpecificObject(bodyName, function, arg1):
 
 #Example formatting
 #Global.debug.addProperty("Stamina", stamina, 2)
+
+#When adding anything to the scene that needs to be deleted on a scene change, use this:
+#get_tree().root.get_node("World")
+#This adds it to the scene root and not the game root
+#This should not be used for persistent objects (such as the player/s)

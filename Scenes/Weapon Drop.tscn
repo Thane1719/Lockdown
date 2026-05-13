@@ -4,6 +4,10 @@
 [ext_resource type="ArrayMesh" uid="uid://0tohxaimc3a8" path="res://Weapons/Models/Pistol/MX1 Blaster.res" id="2_4jmqu"]
 [ext_resource type="ArrayMesh" uid="uid://ohf0bdys7dha" path="res://Weapons/Models/Pistol/Magazine.res" id="3_vcge5"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xta8w"]
+friction = 0.75
+bounce = 0.25
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_andwr"]
 margin = 0.25
 size = Vector3(0.75, 0.75, 0.25)
@@ -28,6 +32,8 @@ properties/3/replication_mode = 1
 [node name="WeaponDrop" type="RigidBody3D" unique_id=2097301339 groups=["InteractableObject"]]
 collision_layer = 2
 collision_mask = 3
+mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_xta8w")
 continuous_cd = true
 script = ExtResource("1_byojy")
 

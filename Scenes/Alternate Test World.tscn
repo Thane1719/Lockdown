@@ -1,0 +1,472 @@
+[gd_scene format=3 uid="uid://dc3xfsbi4jor4"]
+
+[ext_resource type="Script" uid="uid://cy2pypa3niayw" path="res://Scripts/gameWorld.gd" id="1_t8h2s"]
+[ext_resource type="Script" uid="uid://cw5iw0tdrx43u" path="res://gameMechanics/guitasktest.gd" id="2_pfehb"]
+[ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://Scenes/enemy.tscn" id="4_pqjlb"]
+[ext_resource type="Material" uid="uid://c8f5oc8m0t56x" path="res://Materials/Dev material 2.tres" id="5_dfwm5"]
+[ext_resource type="Script" uid="uid://da4bqfupciool" path="res://controllers/reticle.gd" id="6_v2r47"]
+[ext_resource type="Theme" uid="uid://de2nek577lf7m" path="res://controllers/Themes/UI/Debug.tres" id="7_bwd1a"]
+[ext_resource type="Script" uid="uid://dvspsmhr73myh" path="res://controllers/scripts/debug_panel.gd" id="8_qfr4y"]
+[ext_resource type="LabelSettings" uid="uid://dskxen8j6183q" path="res://controllers/materials/Ammo Counter Label Settings.tres" id="9_ip6dh"]
+[ext_resource type="LabelSettings" uid="uid://ymbpk3yphr8i" path="res://controllers/materials/InteractionLabelSettings.tres" id="10_wi7b8"]
+[ext_resource type="Theme" uid="uid://b4n6esmn2elnd" path="res://controllers/Themes/PauseMenuTheme.tres" id="11_6axgn"]
+[ext_resource type="PackedScene" uid="uid://currrrlwvf71l" path="res://Scenes/Item Collection Volume.tscn" id="12_q2aa2"]
+[ext_resource type="PackedScene" uid="uid://dyf8bobfk30yv" path="res://Scenes/Item pedestal.tscn" id="13_yqj0m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_u5pdl"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_w2qqb"]
+sky_material = SubResource("ProceduralSkyMaterial_u5pdl")
+
+[sub_resource type="Environment" id="Environment_6knbf"]
+background_mode = 2
+sky = SubResource("Sky_w2qqb")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lwfgy"]
+albedo_color = Color(0.74138474, 0.7413847, 0.74138457, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r1245"]
+albedo_color = Color(0.06863427, 0.015218134, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ftq4a"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_rmptm"]
+vertices = PackedVector3Array(-1.25, 0.5, -2.5, 0, 0.5, -2.5, 0, 0.5, -31.5, -31.5, 0.5, 0, -2.5, 0.5, 0, -2.25, 0.5, -1.75, -31.5, 0.5, -31.5, 27.75, 0.5, 1.75, 27.75, 0.5, 3.25, 31.5, 0.5, 3, 31.5, 0.5, -31.5, 19.5, 0.75, 1.5, 19.5, 1.75, 3.75, 26.5, 1.75, 3.75, 26.75, 0.75, 1.5, 1.25, 0.5, -2.5, 2.75, 0.5, -0.25, 2.5, 0.5, 1, 18.5, 0.5, 1.75, 2.25, 0.5, -1.75, 0.75, 2.5, 1.5, 1.5, 2.5, 0.75, 1.5, 2.5, -0.75, -0.75, 2.5, -1.5, -1.5, 2.5, -0.75, -1.25, 2.5, 1.25, 0.75, 2.5, -1.5, 1.25, 0.5, 0.5, 0.5, 0.5, -1.25, -1.25, 0.5, -0.5, -1.25, 0.5, 0.5, -0.5, 0.5, 1.25, 0.5, 0.5, 1.25, -0.5, 0.5, -1.25, 1.25, 0.5, -0.5, 0, 0.5, 31.5, 0, 0.5, 2.5, -1.25, 0.5, 2.5, -2.25, 0.5, 1.75, -31.5, 0.5, 31.5, 1.75, 0.5, 2.25, 20, 0.5, 31.5, 20.25, 0.5, 13.75, 18.5, 0.5, 13.5, 27.75, 0.5, 11.75, 31.5, 0.5, 12, 19.5, 2.5, 12.5, 26.5, 2.5, 12.5, 26.5, 2.5, 5.208332, 19.5, 2.5, 5.208332, 19.75, 0.5, 5.75, 19.75, 0.5, 12.5, 26.5, 0.5, 12.5, 26.5, 0.5, 5.75, 27.75, 0.5, 13.25, 27.25, 0.5, 13.75, 31.5, 0.5, 31.5)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(0, 5, 2), PackedInt32Array(2, 5, 6), PackedInt32Array(6, 5, 3), PackedInt32Array(8, 7, 9), PackedInt32Array(9, 7, 10), PackedInt32Array(12, 11, 13), PackedInt32Array(13, 11, 14), PackedInt32Array(15, 1, 2), PackedInt32Array(18, 17, 16), PackedInt32Array(18, 16, 11), PackedInt32Array(11, 16, 19), PackedInt32Array(10, 7, 14), PackedInt32Array(19, 15, 11), PackedInt32Array(11, 15, 14), PackedInt32Array(14, 15, 2), PackedInt32Array(14, 2, 10), PackedInt32Array(21, 20, 22), PackedInt32Array(22, 20, 25), PackedInt32Array(22, 25, 24), PackedInt32Array(22, 24, 23), PackedInt32Array(23, 26, 22), PackedInt32Array(32, 31, 27), PackedInt32Array(27, 31, 30), PackedInt32Array(27, 30, 29), PackedInt32Array(27, 29, 28), PackedInt32Array(29, 33, 28), PackedInt32Array(28, 34, 27), PackedInt32Array(37, 36, 35), PackedInt32Array(3, 4, 38), PackedInt32Array(37, 35, 38), PackedInt32Array(38, 35, 39), PackedInt32Array(38, 39, 3), PackedInt32Array(40, 17, 18), PackedInt32Array(43, 42, 41), PackedInt32Array(40, 18, 36), PackedInt32Array(36, 18, 43), PackedInt32Array(41, 35, 43), PackedInt32Array(43, 35, 36), PackedInt32Array(8, 9, 44), PackedInt32Array(44, 9, 45), PackedInt32Array(13, 48, 12), PackedInt32Array(12, 48, 49), PackedInt32Array(49, 48, 47), PackedInt32Array(49, 47, 46), PackedInt32Array(53, 52, 50), PackedInt32Array(50, 52, 51), PackedInt32Array(54, 44, 45), PackedInt32Array(54, 45, 55), PackedInt32Array(55, 45, 56), PackedInt32Array(42, 55, 41), PackedInt32Array(41, 55, 56)]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_62ac6"]
+size = Vector2(64, 64)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_t8h2s"]
+points = PackedVector3Array(-32, 0, -32, -32, 0, 32, 32, 0, -32, 32, 0, 32)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dfwm5"]
+top_radius = 2.0
+bottom_radius = 2.0
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_dfwm5"]
+points = PackedVector3Array(0, -1, -2, -0.19616282, -1, -1.990603, 0, 1, -2, 0.19577146, -1, -1.990603, -0.19616282, 1, -1.990603, -0.3903681, -1, -1.9616288, 0.19577146, 1, -1.990603, 0.3899765, -1, -1.9616288, -0.3903681, 1, -1.9616288, -0.58065784, -1, -1.9142522, 0.3899765, 1, -1.9616288, 0.58026624, -1, -1.9142522, -0.58065784, 1, -1.9142522, -0.765466, -1, -1.8480815, 0.58026624, 1, -1.9142522, 0.7650745, -1, -1.8480815, -0.765466, 1, -1.8480815, -0.94283473, -1, -1.7638998, 0.7650745, 1, -1.8480815, 0.94244313, -1, -1.7638998, -0.94283473, 1, -1.7638998, -1.1111982, -1, -1.6632733, 0.94244313, 1, -1.7638998, 1.1108065, -1, -1.6632733, -1.1111982, 1, -1.6632733, -1.2689898, -1, -1.5462021, 1.1108065, 1, -1.6632733, 1.2685983, -1, -1.5462021, -1.2689898, 1, -1.5462021, -1.4142522, -1, -1.4142522, 1.2685983, 1, -1.5462021, 1.4138606, -1, -1.4142522, -1.4142522, 1, -1.4142522, -1.5462021, -1, -1.2689898, 1.4138606, 1, -1.4142522, 1.5458105, -1, -1.2689898, -1.5462021, 1, -1.2689898, -1.6632733, -1, -1.1111982, 1.5458105, 1, -1.2689898, 1.6628819, -1, -1.1111982, -1.6632733, 1, -1.1111982, -1.7638998, -1, -0.94283473, 1.6628819, 1, -1.1111982, 1.7635083, -1, -0.94283473, -1.7638998, 1, -0.94283473, -1.8480815, -1, -0.765466, 1.7635083, 1, -0.94283473, 1.8476899, -1, -0.765466, -1.8480815, 1, -0.765466, -1.9142522, -1, -0.58065784, 1.8476899, 1, -0.765466, 1.9138606, -1, -0.58065784, -1.9142522, 1, -0.58065784, -1.9616288, -1, -0.3903681, 1.9138606, 1, -0.58065784, 1.9612372, -1, -0.3903681, -1.9616288, 1, -0.3903681, -1.990603, -1, -0.19616282, 1.9612372, 1, -0.3903681, 1.9902115, -1, -0.19616282, -1.990603, 1, -0.19616282, -2, -1, 0, 1.9902115, 1, -0.19616282, 2, -1, 0, -2, 1, 0, -1.990603, -1, 0.19577146, 2, 1, 0, 1.9902115, -1, 0.19577146, -1.990603, 1, 0.19577146, -1.9616288, -1, 0.3899765, 1.9902115, 1, 0.19577146, 1.9612372, -1, 0.3899765, -1.9616288, 1, 0.3899765, -1.9142522, -1, 0.58026624, 1.9612372, 1, 0.3899765, 1.9138606, -1, 0.58026624, -1.9142522, 1, 0.58026624, -1.8480815, -1, 0.7650745, 1.9138606, 1, 0.58026624, 1.8476899, -1, 0.7650745, -1.8480815, 1, 0.7650745, -1.7638998, -1, 0.94244313, 1.8476899, 1, 0.7650745, 1.7635083, -1, 0.94244313, -1.7638998, 1, 0.94244313, -1.6632733, -1, 1.1108065, 1.7635083, 1, 0.94244313, 1.6628819, -1, 1.1108065, -1.6632733, 1, 1.1108065, -1.5462021, -1, 1.2685983, 1.6628819, 1, 1.1108065, 1.5458105, -1, 1.2685983, -1.5462021, 1, 1.2685983, -1.4142522, -1, 1.4138606, 1.5458105, 1, 1.2685983, 1.4138606, -1, 1.4138606, -1.4142522, 1, 1.4138606, -1.2689898, -1, 1.5458105, 1.4138606, 1, 1.4138606, 1.2685983, -1, 1.5458105, -1.2689898, 1, 1.5458105, -1.1111982, -1, 1.6628819, 1.2685983, 1, 1.5458105, 1.1108065, -1, 1.6628819, -1.1111982, 1, 1.6628819, -0.94283473, -1, 1.7635083, 1.1108065, 1, 1.6628819, 0.94244313, -1, 1.7635083, -0.94283473, 1, 1.7635083, -0.765466, -1, 1.8476899, 0.94244313, 1, 1.7635083, 0.7650745, -1, 1.8476899, -0.765466, 1, 1.8476899, -0.58065784, -1, 1.9138606, 0.7650745, 1, 1.8476899, 0.58026624, -1, 1.9138606, -0.58065784, 1, 1.9138606, -0.3903681, -1, 1.9612372, 0.58026624, 1, 1.9138606, 0.3899765, -1, 1.9612372, -0.3903681, 1, 1.9612372, -0.19616282, -1, 1.9902115, 0.3899765, 1, 1.9612372, 0.19577146, -1, 1.9902115, -0.19616282, 1, 1.9902115, 0, -1, 2, 0.19577146, 1, 1.9902115, 0, 1, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_62ac6"]
+size = Vector3(8, 3, 8)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_62ac6"]
+points = PackedVector3Array(-4, -1.5, -4, -4, 1.5, -4, 4, -1.5, -4, -4, -1.5, 4, -4, 1.5, 4, 4, 1.5, -4, 4, -1.5, 4, 4, 1.5, 4)
+
+[sub_resource type="PrismMesh" id="PrismMesh_thg6h"]
+left_to_right = 0.0
+size = Vector3(4, 2, 8)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_thg6h"]
+points = PackedVector3Array(2, -1, 4, -2, 1, 4, -2, -1, 4, 2, -1, -4, -2, 1, -4, -2, -1, -4)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dbplf"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_cdpo3"]
+font_size = 64
+
+[node name="World" type="Node" unique_id=1730723652]
+script = ExtResource("1_t8h2s")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1539882701]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1553380858]
+environment = SubResource("Environment_6knbf")
+
+[node name="InteractableTest" type="CSGBox3D" parent="." unique_id=1913512822]
+transform = Transform3D(0.7496261, 0, -0.66186154, 0, 1, 0, 0.66186154, 0, 0.7496261, -4.9282613, 0.42535555, -5.0354357)
+material = SubResource("StandardMaterial3D_lwfgy")
+
+[node name="box1" type="CSGBox3D" parent="InteractableTest" unique_id=1095838843]
+transform = Transform3D(0.99896884, 0.03652684, 0.02698183, -0.04016888, 0.98789424, 0.14983608, -0.021181762, -0.15076561, 0.9883425, 0.017092466, 0.6663114, -0.18535471)
+size = Vector3(0.991333, 0.51708984, 0.84484863)
+
+[node name="box2" type="CSGBox3D" parent="InteractableTest" unique_id=1519202313]
+transform = Transform3D(0.9999504, 0.0012059435, -0.00995627, -0.0033301376, 0.976345, -0.21619232, 0.009460539, 0.21621434, 0.9762998, 0.0040130615, 0.05216068, 0.15871859)
+size = Vector3(0.991333, 0.923584, 0.84484863)
+
+[node name="box3" type="CSGBox3D" parent="InteractableTest" unique_id=53582541]
+transform = Transform3D(0.99841845, 0.0024832934, 0.056176186, -0.020202108, 0.948165, 0.31713584, -0.052476585, -0.31776893, 0.9467151, 0.014845133, 0.6550026, 0.24667215)
+size = Vector3(0.7612793, 0.48344725, 0.14035645)
+material = SubResource("StandardMaterial3D_r1245")
+
+[node name="Area3D" type="Area3D" parent="InteractableTest" unique_id=2031648996]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableTest/Area3D" unique_id=1640450757]
+shape = SubResource("BoxShape3D_ftq4a")
+
+[node name="GUItasktest" type="Window" parent="." unique_id=830631381]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Minitask test"
+initial_position = 2
+size = Vector2i(900, 500)
+visible = false
+transient = true
+transient_to_focused = true
+exclusive = true
+script = ExtResource("2_pfehb")
+
+[node name="GUI" type="CanvasLayer" parent="GUItasktest" unique_id=183574257]
+
+[node name="Panel" type="Panel" parent="GUItasktest/GUI" unique_id=923370294]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GUItasktest/GUI/Panel" unique_id=1071161576]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="GUItasktest/GUI/Panel/SubViewportContainer" unique_id=1617212057]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(900, 500)
+size_2d_override = Vector2i(1150, 650)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="GUItasktest" unique_id=144988928]
+transform = Transform3D(0.6735674, 0, -0.7391258, 0, 1, 0, 0.7391258, 0, 0.6735674, 1.9815508, 1.2883507, -3.0262659)
+visible = false
+visibility_parent = NodePath("../../InteractableTest")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1971673780]
+
+[node name="SpawnPoints2" type="Node3D" parent="." unique_id=863307615]
+
+[node name="Robber" type="Node3D" parent="SpawnPoints2" unique_id=2060114088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.357935, 2, 0)
+
+[node name="Marker3D" type="Marker3D" parent="SpawnPoints2/Robber" unique_id=2026920293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -0.71219444)
+
+[node name="Cops" type="Node3D" parent="SpawnPoints2" unique_id=183918976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.373262, 2, 0)
+
+[node name="Marker3D" type="Marker3D" parent="SpawnPoints2/Cops" unique_id=106706201]
+transform = Transform3D(0.2774824, 0, 0.96073073, 0, 1, 0, -0.96073073, 0, 0.2774824, 0, -2, 0)
+
+[node name="SpawnPoints" type="MultiplayerSpawner" parent="." unique_id=657898112]
+_spawnable_scenes = PackedStringArray("uid://c3ffql15mo0aj")
+spawn_path = NodePath("..")
+
+[node name="Enemy" parent="." unique_id=204833997 instance=ExtResource("4_pqjlb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007420063, 3.03476, 0.74423)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1849368165]
+navigation_mesh = SubResource("NavigationMesh_rmptm")
+
+[node name="Floor" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=695258871]
+material_override = ExtResource("5_dfwm5")
+mesh = SubResource("PlaneMesh_62ac6")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Floor" unique_id=1436022232]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Floor/StaticBody3D" unique_id=1282344099]
+shape = SubResource("ConvexPolygonShape3D_t8h2s")
+
+[node name="Cylinder wall" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=2099874784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("5_dfwm5")
+mesh = SubResource("CylinderMesh_dfwm5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Cylinder wall" unique_id=1732503235]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Cylinder wall/StaticBody3D" unique_id=2051403550]
+shape = SubResource("ConvexPolygonShape3D_dfwm5")
+
+[node name="Cube Floor" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=2106750421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 0.5, 9)
+material_override = ExtResource("5_dfwm5")
+mesh = SubResource("BoxMesh_62ac6")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Cube Floor" unique_id=1063542866]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Cube Floor/StaticBody3D" unique_id=945356086]
+shape = SubResource("ConvexPolygonShape3D_62ac6")
+
+[node name="Ramp" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=1812456529]
+transform = Transform3D(-4.371139e-08, 4.371139e-08, 1, -4.371139e-08, 1, -4.371139e-08, -1, -4.371139e-08, -4.3711385e-08, 23, 1, 3)
+material_override = ExtResource("5_dfwm5")
+mesh = SubResource("PrismMesh_thg6h")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Ramp" unique_id=138281978]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ramp/StaticBody3D" unique_id=60960643]
+shape = SubResource("ConvexPolygonShape3D_thg6h")
+
+[node name="UserInterface" type="Control" parent="." unique_id=499654013]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle" type="CenterContainer" parent="UserInterface" unique_id=949750882 node_paths=PackedStringArray("reticleLines")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_v2r47")
+reticleLines = [NodePath("Top"), NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
+
+[node name="Top" type="Line2D" parent="UserInterface/Reticle" unique_id=1732098349]
+position = Vector2(20, 20)
+points = PackedVector2Array(0, -5, 0, -15)
+width = 2.0
+
+[node name="Bottom" type="Line2D" parent="UserInterface/Reticle" unique_id=329594453]
+position = Vector2(20, 20)
+points = PackedVector2Array(0, 5, 0, 15)
+width = 2.0
+
+[node name="Right" type="Line2D" parent="UserInterface/Reticle" unique_id=1180717961]
+position = Vector2(20, 20)
+points = PackedVector2Array(5, 0, 15, 0)
+width = 2.0
+
+[node name="Left" type="Line2D" parent="UserInterface/Reticle" unique_id=764094002]
+position = Vector2(20, 20)
+points = PackedVector2Array(-5, 0, -15, 0)
+width = 2.0
+
+[node name="DebugPanel" type="PanelContainer" parent="UserInterface" unique_id=1280980184]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme = ExtResource("7_bwd1a")
+script = ExtResource("8_qfr4y")
+
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/DebugPanel" unique_id=1271961410]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/DebugPanel/MarginContainer" unique_id=2032843885]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Ammo" type="HBoxContainer" parent="UserInterface" unique_id=970280991]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -204.0
+offset_top = -142.0
+offset_right = -97.0
+offset_bottom = -54.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Clip" type="Label" parent="UserInterface/Ammo" unique_id=690624679]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "<null>"
+label_settings = ExtResource("9_ip6dh")
+
+[node name="Label" type="Label" parent="UserInterface/Ammo" unique_id=544039431]
+layout_mode = 2
+text = "/"
+label_settings = ExtResource("9_ip6dh")
+
+[node name="Reserve" type="Label" parent="UserInterface/Ammo" unique_id=1059840185]
+unique_name_in_owner = true
+layout_mode = 2
+text = "<null>"
+label_settings = ExtResource("9_ip6dh")
+
+[node name="TotalValue" type="HBoxContainer" parent="UserInterface" unique_id=498307884]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = -259.0
+offset_right = 170.0
+offset_bottom = -171.0
+grow_vertical = 0
+
+[node name="TotalValue" type="Label" parent="UserInterface/TotalValue" unique_id=893519168]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("9_ip6dh")
+
+[node name="Health" type="HBoxContainer" parent="UserInterface" unique_id=1968887300]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = -113.0
+offset_right = 170.0
+offset_bottom = -25.0
+grow_vertical = 0
+
+[node name="Health" type="Label" parent="UserInterface/Health" unique_id=36381877]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100"
+label_settings = SubResource("LabelSettings_dbplf")
+
+[node name="InteractionHbox" type="HBoxContainer" parent="UserInterface" unique_id=2127920321]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -227.0
+offset_top = 120.0
+offset_right = 227.0
+offset_bottom = 187.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InteractionLabel" type="Label" parent="UserInterface/InteractionHbox" unique_id=540256251]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+label_settings = ExtResource("10_wi7b8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spawn Text" type="HBoxContainer" parent="UserInterface" unique_id=47292584]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -283.0
+offset_bottom = -195.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spawn Label" type="Label" parent="UserInterface/Spawn Text" unique_id=38426444]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "TestTest"
+label_settings = SubResource("LabelSettings_cdpo3")
+
+[node name="MYidVbox" type="VBoxContainer" parent="UserInterface" unique_id=413844586]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 6.0
+offset_right = 1143.0
+offset_bottom = 77.0
+
+[node name="MyIdLabel" type="Label" parent="UserInterface/MYidVbox" unique_id=1674277987]
+unique_name_in_owner = true
+layout_mode = 2
+text = "aaaawagga"
+
+[node name="PauseLayer" type="CanvasLayer" parent="." unique_id=957366646]
+visible = false
+
+[node name="PausePanel" type="Panel" parent="PauseLayer" unique_id=912028623]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -298.0
+offset_top = -215.0
+offset_right = 298.0
+offset_bottom = 215.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("11_6axgn")
+
+[node name="PauseVbox" type="VBoxContainer" parent="PauseLayer/PausePanel" unique_id=384442870]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.5
+offset_top = -25.0
+offset_right = 48.5
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2115988080]
+layout_mode = 2
+text = "heeheehoo"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=1246233509]
+layout_mode = 2
+text = "ooheehehee"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2046067808]
+layout_mode = 2
+text = "Button that does nothing"
+
+[node name="ItemCollectionVolume" parent="." unique_id=409276444 instance=ExtResource("12_q2aa2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.826765, 0.56158936, -0.73392963)
+
+[node name="ItemPedestal" parent="." unique_id=1849080789 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.560696, 2.6249995, 7.0469966)
+
+[node name="ItemPedestal2" parent="." unique_id=1231719221 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.008234, 2.624999, 10.674433)
+
+[node name="ItemPedestal3" parent="." unique_id=1117779505 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.990599, 2.6249995, 12.220156)
+
+[node name="ItemPedestal4" parent="." unique_id=512494851 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.585321, 2.6249995, 8.144159)
+
+[node name="ItemPedestal5" parent="." unique_id=1140641617 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.093616, 2.6249995, 10.619704)
+
+[node name="ItemPedestal6" parent="." unique_id=1155773454 instance=ExtResource("13_yqj0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.9977307)
+
+[connection signal="body_entered" from="InteractableTest/Area3D" to="." method="_GUI_window_open"]
+[connection signal="close_requested" from="GUItasktest" to="GUItasktest" method="_GUI_window_close"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
+[connection signal="spawned" from="SpawnPoints" to="." method="_on_multiplayer_spawner_spawned"]

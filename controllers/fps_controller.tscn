@@ -906,7 +906,7 @@ properties/7/path = NodePath("CollisionShape3D/Cop model:visible")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D" unique_id=1200792928]
+[node name="Player" type="CharacterBody3D" unique_id=1200792928 groups=["player"]]
 script = ExtResource("1_pgc1p")
 MOUSE_SENSITIVITY = 0.15
 
@@ -942,11 +942,11 @@ transform = Transform3D(1, 2.11758e-22, 6.31089e-30, 0, 1, 3.55271e-15, 0, 0, 1,
 mesh = ExtResource("5_h7h5r")
 
 [node name="WeaponMagazine" parent="CameraController/Camera3D/WeaponRig/Weapon" index="1" unique_id=1020052104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.01)
 mesh = ExtResource("6_fdopr")
 
 [node name="WeaponBolt" parent="CameraController/Camera3D/WeaponRig/Weapon" index="2" unique_id=100677615]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.01)
-mesh = null
 
 [node name="WeaponShadow" parent="CameraController/Camera3D/WeaponRig/Weapon" index="3" unique_id=1117034354]
 mesh = ExtResource("5_h7h5r")

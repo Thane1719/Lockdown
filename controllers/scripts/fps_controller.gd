@@ -69,7 +69,9 @@ func _input(event):
 
 	if event.is_action_pressed("exit"):
 		get_tree().quit()
-
+	
+	if event.is_action_pressed("debug"):
+		Global.changeScene("res://Scenes/Alternate Test World.tscn")
 
 func _update_camera(delta):
 

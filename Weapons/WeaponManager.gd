@@ -317,7 +317,7 @@ func shoot() -> void:
 			bulletInstance.global_transform = bulletSpawnPoint.global_transform
 			bulletInstance.rotation += accuracyAdjustment / 100
 			bulletInstance.scale = Vector3(0.25, 0.25, 0.25)
-			get_tree().get_root().add_child(bulletInstance)
+			get_tree().root.get_node("World").add_child(bulletInstance)
 		
 		#Global functions that always run after a shot
 		#Such as updating ammo, animations and recoil
@@ -441,7 +441,7 @@ func dropWeapon():
 			#Loading the correct stats on the weapon drop allows a dropped weapon to retain stats
 			var dropInstance = weaponDrop.instantiate()
 			var dropVel = Vector3(0,0,0)
-			get_tree().get_root().add_child(dropInstance)
+			get_tree().root.get_node("World").add_child(dropInstance)
 			dropInstance.global_position = bulletSpawnPoint.global_position
 			dropInstance.setWeapon(currentWeapon)
 			dropInstance.setModel(currentWeapon)
@@ -466,7 +466,7 @@ func dropWeapon():
 func replicateDroppedWeapon(weapon, clip, reserve, dropPos, dropVel, team):
 	var dropInstance = weaponDrop.instantiate()
 	dropInstance.global_position = dropPos
-	get_tree().get_root().add_child(dropInstance)
+	get_tree().root.get_node("World").add_child(dropInstance)
 	dropInstance.setWeapon(weapon)
 	dropInstance.setTeam(team)
 	dropInstance.setModel(weapon)
