@@ -6,6 +6,7 @@ func _ready() -> void:
 	close_requested.connect(_GUI_window_close)
 
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass

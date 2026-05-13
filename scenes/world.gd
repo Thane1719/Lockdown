@@ -201,14 +201,17 @@ func deboggled(): #this probably isnt the best way to do this but it works
 		isPaused = false
 	print(str(isPaused))
 
-func _GUI_window_open(_body: Player) -> void:
+# player interacting with minitask
+func _GUI_window_open(body: Player) -> void:
 	var minitask = preload("res://gameMechanics/hacking_minitask.tscn").instantiate()
-	if _body.is_multiplayer_authority():
+	if body.is_multiplayer_authority():
 		var player_group = get_tree().get_first_node_in_group("player_group")
 		player_group.is_interacting = true
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE # Release mouse
 		GUI.show()
 		GUI_viewport.add_child(minitask)
 		print("player interacted with minitask")
+
+# player quits window:
 		if GUI_window != null:
 			GUI_window.emit_signal("close_requested")

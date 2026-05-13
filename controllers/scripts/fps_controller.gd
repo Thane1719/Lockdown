@@ -94,18 +94,12 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 
-
-
 func _physics_process(delta):
 	
 	if not is_multiplayer_authority():
 		return
-	
-	if is_interacting:
-		velocity = Vector3.ZERO
-		move_and_slide()
-		return
 
+		
 	_update_camera(delta)
 
 	Global.debug.addProperty("Speed", get_real_velocity().length(), 2)
@@ -148,7 +142,12 @@ func updateInput(speed: float, acceleration: float, deceleration: float) -> void
 	else:
 		velocity.x = move_toward(velocity.x, 0, deceleration)
 		velocity.z = move_toward(velocity.z, 0, deceleration)
-
+	
+	# pauses player
+	if is_interacting:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
 
 func updateVelocity() -> void:
 
