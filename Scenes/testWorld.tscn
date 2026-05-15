@@ -409,15 +409,11 @@ theme = ExtResource("10_r1245")
 
 [node name="PauseVbox" type="VBoxContainer" parent="PauseLayer/PausePanel" unique_id=384442870]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -48.5
-offset_top = -25.0
-offset_right = 48.5
-offset_bottom = 25.0
+anchors_preset = -1
+anchor_left = 0.082214765
+anchor_top = 0.093023255
+anchor_right = 0.9177852
+anchor_bottom = 0.90697676
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -426,7 +422,8 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2115988080]
 layout_mode = 2
-text = "heeheehoo"
+size_flags_vertical = 1
+text = "PAUSED"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=1246233509]
@@ -466,3 +463,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.997730
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="spawned" from="SpawnPoints" to="." method="_on_multiplayer_spawner_spawned"]
+[connection signal="pressed" from="PauseLayer/PausePanel/PauseVbox/Button" to="." method="_on_Quit_button_pressed"]

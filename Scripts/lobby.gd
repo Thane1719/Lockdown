@@ -221,3 +221,7 @@ func _GUI_window_open(_body: Player) -> void:
 	if GUI_window != null:
 		GUI_window.emit_signal("close_requested")
 		Global.taskMode = false
+
+
+func _on_Quit_button_pressed() -> void:
+	print("just crash the game or something idk")
