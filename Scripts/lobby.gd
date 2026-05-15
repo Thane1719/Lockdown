@@ -5,7 +5,7 @@ extends Node
 @onready var hud = $UserInterface
 @onready var myIDref = multiplayer.get_unique_id()
 
-@onready var GUI = $GUItasktest
+@onready var GUI = $GUIwindow
 @onready var GUI_viewport = %SubViewport
 @export var GUI_window: Window 
 
@@ -21,7 +21,7 @@ var teams = {} # peer_id -> "Cop" or "Robber"
 var playercount = 0
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
-var debWin = preload("res://scenes/Debug.tscn")
+var debWin = preload("res://Scenes/Debug.tscn")
 
 func _on_host_button_pressed():
 
@@ -83,10 +83,6 @@ func _ready() -> void:
 	Global.totalValue = 0
 	GUI.hide()
 	print(Input.get_joy_name(0))
-	get_viewport().set_embedding_subwindows(false)
-	var DebugPanel = debWin.instantiate() #gonna be honest ive got no clue what this means
-	add_child(DebugPanel)
-	DebugPanel.visible = true
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):

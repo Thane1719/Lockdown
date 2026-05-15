@@ -1,13 +1,10 @@
 [gd_scene format=3 uid="uid://c8oqxmm2w2wvv"]
 
-
 [ext_resource type="Script" uid="uid://demmf2hbrwaat" path="res://Scripts/lobby.gd" id="1_ctiuy"]
 [ext_resource type="PackedScene" uid="uid://c1j7an8woikyd" path="res://Scenes/environment.tscn" id="2_fr3vy"]
 [ext_resource type="AudioStream" uid="uid://dbwy7vdmgmifi" path="res://Scenes/starostin-crime-heist-investigation-music-259668.mp3" id="3_8b5ia"]
 [ext_resource type="Script" uid="uid://cw5iw0tdrx43u" path="res://gameMechanics/guiwindow.gd" id="3_ftq4a"]
 [ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://Scenes/enemy.tscn" id="3_nule3"]
-
-
 [ext_resource type="Script" uid="uid://da4bqfupciool" path="res://controllers/reticle.gd" id="4_0ddhe"]
 [ext_resource type="Theme" uid="uid://de2nek577lf7m" path="res://controllers/Themes/UI/Debug.tres" id="5_lwfgy"]
 [ext_resource type="Script" uid="uid://dvspsmhr73myh" path="res://controllers/scripts/debug_panel.gd" id="6_r1245"]
@@ -88,7 +85,6 @@ initial_position = 2
 size = Vector2i(900, 500)
 transient_to_focused = true
 exclusive = true
-force_native = true
 script = ExtResource("3_ftq4a")
 
 [node name="GUI" type="CanvasLayer" parent="GUIwindow" unique_id=183574257]
@@ -199,7 +195,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.373262, 2, 0)
 transform = Transform3D(0.2774824, 0, 0.96073073, 0, 1, 0, -0.96073073, 0, 0.2774824, 0, 0, 0)
 
 [node name="SpawnPoints" type="MultiplayerSpawner" parent="." unique_id=559373657]
-
 _spawnable_scenes = PackedStringArray("uid://c3ffql15mo0aj")
 spawn_path = NodePath("..")
 
@@ -258,14 +253,9 @@ position = Vector2(20, 20)
 points = PackedVector2Array(-5, 0, -15, 0)
 width = 2.0
 
-[node name="DebugWindow" type="Window" parent="UserInterface" unique_id=651005666]
-oversampling_override = 1.0
-initial_position = 3
-current_screen = 0
-popup_window = true
-
-[node name="DebugPanel" type="PanelContainer" parent="UserInterface/DebugWindow" unique_id=1280980184]
+[node name="DebugPanel" type="PanelContainer" parent="UserInterface" unique_id=1280980184]
 custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 210.0
@@ -273,10 +263,10 @@ offset_bottom = 50.0
 theme = ExtResource("5_lwfgy")
 script = ExtResource("6_r1245")
 
-[node name="MarginContainer" type="MarginContainer" parent="UserInterface/DebugWindow/DebugPanel" unique_id=1271961410]
+[node name="MarginContainer" type="MarginContainer" parent="UserInterface/DebugPanel" unique_id=1271961410]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/DebugWindow/DebugPanel/MarginContainer" unique_id=2032843885]
+[node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/DebugPanel/MarginContainer" unique_id=2032843885]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -468,7 +458,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.093616, 2.6249995, 10.6197
 
 [node name="ItemPedestal6" parent="." unique_id=1155773454 instance=ExtResource("9_lwfgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.9977307)
-
 
 [connection signal="body_entered" from="InteractableTest/Area3D" to="." method="_GUI_window_open"]
 [connection signal="close_requested" from="GUIwindow" to="GUIwindow" method="_GUI_window_close"]
