@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bt2yh3giqbjo7"]
 
+[ext_resource type="Texture2D" uid="uid://rariwxbo4hpu" path="res://Items/Item Models/Itemsglb_Horse.jpg" id="1_rwhvy"]
+
 [node name="Debug" type="Control" unique_id=1754011149]
 layout_mode = 3
 anchors_preset = 15
@@ -10,4 +12,9 @@ grow_vertical = 2
 
 [node name="Window" type="Window" parent="." unique_id=1405924908]
 oversampling_override = 1.0
-position = Vector2i(526, 274)
+initial_position = 1
+size = Vector2i(500, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="Window" unique_id=963437362]
+position = Vector2(252, 120)
+texture = ExtResource("1_rwhvy")
