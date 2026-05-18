@@ -15,3 +15,8 @@ func spawn_player():
 	var new_player = player_scene.instantiate()
 	new_player.global_position = $SpawnPoint.global_position
 	add_child(new_player)
+
+
+func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	if body.name == "2DPlayer":
+		print("You Win!")

@@ -8,6 +8,8 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vim1e"]
 blend_mode = 1
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_vim1e"]
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vim1e"]
 bounce = 1.0
 
@@ -48,6 +50,13 @@ material = SubResource("CanvasItemMaterial_vim1e")
 position = Vector2(1, -1)
 scale = Vector2(0.3046875, 0.28125)
 texture = ExtResource("4_2dyur")
+
+[node name="Area2D" type="Area2D" parent="reward/Sprite2D" unique_id=87722816]
+position = Vector2(-3.2819824, 3.555542)
+scale = Vector2(3.2820513, 3.5555556)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="reward/Sprite2D/Area2D" unique_id=873807813]
+shape = SubResource("CircleShape2D_vim1e")
 
 [node name="2DPlayer" parent="." unique_id=2084647647 instance=ExtResource("4_owrb1")]
 visible = false
@@ -123,3 +132,5 @@ texture = ExtResource("4_2dyur")
 position = Vector2(949.99963, 304.99994)
 scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_g5g3y")
+
+[connection signal="body_shape_entered" from="reward/Sprite2D/Area2D" to="." method="_on_area_2d_body_shape_entered"]
