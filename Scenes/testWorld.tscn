@@ -461,7 +461,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.093616, 2.6249995, 10.6197
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.9977307)
 
 [node name="chatbox" parent="." unique_id=18944203 instance=ExtResource("14_0roqs")]
-position = Vector2(-114, 301)
+position = Vector2(-118, 251)
 
 [connection signal="body_entered" from="InteractableTest/Area3D" to="." method="_GUI_window_open"]
 [connection signal="close_requested" from="GUIwindow" to="GUIwindow" method="_GUI_window_close"]
