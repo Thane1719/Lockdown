@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dsnlvvty67gqu"]
+
+[ext_resource type="Script" uid="uid://dsux2ll1dtpqb" path="res://gameMechanics/2d_player.gd" id="1_0ss51"]
+[ext_resource type="Texture2D" uid="uid://buvxdbhao4n7y" path="res://icon.svg" id="2_eilb8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qc5cr"]
+radius = 50.219517
+
+[node name="2DPlayer" type="CharacterBody2D" unique_id=2084647647]
+script = ExtResource("1_0ss51")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1123968744]
+position = Vector2(0, -1)
+texture = ExtResource("2_eilb8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=10221713]
+position = Vector2(-3, -3)
+shape = SubResource("CircleShape2D_qc5cr")
+one_way_collision = true
+debug_color = Color(0.562364, 0.5594716, 0, 0.41960785)

@@ -1,16 +1,41 @@
 [gd_scene format=3 uid="uid://p0ufc8rwywy3"]
 
-[ext_resource type="Script" uid="uid://bakqjv8uh0jyx" path="res://Scripts/main_menu.gd" id="1_0ykhv"]
+[ext_resource type="Script" uid="uid://bakqjv8uh0jyx" path="res://Menus/main_menu.gd" id="1_0ykhv"]
 [ext_resource type="Theme" uid="uid://dfvf6hx2xcliy" path="res://controllers/Themes/MainMenu.tres" id="1_yqorp"]
 
-[node name="MainMenu" type="Node2D" unique_id=1543144528]
+[node name="MainMenu" type="Control" unique_id=876959252]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_0ykhv")
 
 [node name="Menubuttons" type="VBoxContainer" parent="." unique_id=1948515570]
-offset_left = 23.0
-offset_top = 22.0
-offset_right = 354.0
-offset_bottom = 625.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.5
+offset_top = -301.5
+offset_right = 224.5
+offset_bottom = 301.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Menubuttons" unique_id=252218841]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "LOCKDOWN"
+horizontal_alignment = 1
+
+[node name="LineBreak1" type="Control" parent="Menubuttons" unique_id=783837631]
+custom_minimum_size = Vector2(5, 20)
+layout_mode = 2
 
 [node name="Singleplayer" type="Button" parent="Menubuttons" unique_id=1285068060]
 layout_mode = 2
@@ -22,7 +47,7 @@ layout_mode = 2
 theme = ExtResource("1_yqorp")
 text = "Host"
 
-[node name="LineBreak" type="Control" parent="Menubuttons" unique_id=783837631]
+[node name="LineBreak2" type="Control" parent="Menubuttons" unique_id=335253692]
 custom_minimum_size = Vector2(5, 20)
 layout_mode = 2
 
@@ -37,7 +62,7 @@ layout_mode = 2
 theme = ExtResource("1_yqorp")
 text = "Join"
 
-[node name="AnotherLineBreak" type="Control" parent="Menubuttons" unique_id=335253692]
+[node name="LineBreak3" type="Control" parent="Menubuttons" unique_id=1336720523]
 custom_minimum_size = Vector2(5, 20)
 layout_mode = 2
 

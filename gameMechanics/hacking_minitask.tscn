@@ -1,15 +1,13 @@
 [gd_scene format=3 uid="uid://c7l2n6j51pv0e"]
 
 [ext_resource type="Script" uid="uid://c1wvmwqpcdne2" path="res://gameMechanics/hacking_minitask.gd" id="1_a4q0h"]
-[ext_resource type="Script" uid="uid://dsux2ll1dtpqb" path="res://gameMechanics/2d_player.gd" id="2_7x3vr"]
 [ext_resource type="Texture2D" path="/home/cindysayer/Downloads/Lockdown-main/icon.svg" id="4_2dyur"]
 [ext_resource type="Texture2D" uid="uid://buvxdbhao4n7y" path="res://icon.svg" id="4_vim1e"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vim1e"]
 blend_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_qc5cr"]
-radius = 50.219517
+[sub_resource type="CircleShape2D" id="CircleShape2D_vim1e"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vim1e"]
 bounce = 1.0
@@ -37,28 +35,27 @@ offset_right = 1209.0
 offset_bottom = 699.0
 texture = ExtResource("4_vim1e")
 
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1165734737]
+unique_name_in_owner = true
+material = SubResource("CanvasItemMaterial_vim1e")
+position = Vector2(111, 577)
+scale = Vector2(0.3046875, 0.28125)
+
 [node name="reward" type="Node2D" parent="." unique_id=729839377]
-position = Vector2(749, 240)
+position = Vector2(741, 283)
 
 [node name="Sprite2D" type="Sprite2D" parent="reward" unique_id=1451546102]
 material = SubResource("CanvasItemMaterial_vim1e")
-position = Vector2(2, 3)
+position = Vector2(1, -1)
 scale = Vector2(0.3046875, 0.28125)
 texture = ExtResource("4_2dyur")
 
-[node name="2DPlayer" type="CharacterBody2D" parent="." unique_id=831064467]
-position = Vector2(112, 549)
-script = ExtResource("2_7x3vr")
+[node name="Area2D" type="Area2D" parent="reward/Sprite2D" unique_id=87722816]
+position = Vector2(-3.2819824, 3.555542)
+scale = Vector2(3.2820513, 3.5555556)
 
-[node name="Sprite2D" type="Sprite2D" parent="2DPlayer" unique_id=1027031352]
-position = Vector2(0, -1)
-texture = ExtResource("4_vim1e")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="2DPlayer" unique_id=298103553]
-position = Vector2(-3, -3)
-shape = SubResource("CircleShape2D_qc5cr")
-one_way_collision = true
-debug_color = Color(0.562364, 0.5594716, 0, 0.41960785)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="reward/Sprite2D/Area2D" unique_id=873807813]
+shape = SubResource("CircleShape2D_vim1e")
 
 [node name="Barriers" type="StaticBody2D" parent="." unique_id=1635634473]
 position = Vector2(545.00006, 508.00006)
@@ -130,3 +127,5 @@ texture = ExtResource("4_2dyur")
 position = Vector2(949.99963, 304.99994)
 scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_g5g3y")
+
+[connection signal="body_shape_entered" from="reward/Sprite2D/Area2D" to="." method="_on_area_2d_body_shape_entered"]

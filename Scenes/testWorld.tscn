@@ -84,6 +84,7 @@ oversampling_override = 1.0
 title = "Minitask test"
 initial_position = 2
 size = Vector2i(900, 500)
+visible = false
 transient_to_focused = true
 exclusive = true
 script = ExtResource("3_ftq4a")
@@ -170,16 +171,9 @@ layout_mode = 2
 placeholder_text = "Enter Address to Join Here"
 alignment = 1
 
-[node name="GUItest" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1440372615]
-visible = false
-layout_mode = 2
-text = "GUI minitask scene test"
-
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="CanvasLayer" unique_id=323138804]
 stream = ExtResource("3_8b5ia")
 autoplay = true
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1971673780]
 
 [node name="SpawnPoints2" type="Node3D" parent="." unique_id=863307615]
 
@@ -254,7 +248,16 @@ position = Vector2(20, 20)
 points = PackedVector2Array(-5, 0, -15, 0)
 width = 2.0
 
+
+[node name="DebugWindow" type="Window" parent="UserInterface" unique_id=651005666]
+oversampling_override = 1.0
+initial_position = 3
+current_screen = 0
+visible = false
+popup_window = true
+
 [node name="DebugPanel" type="PanelContainer" parent="UserInterface" unique_id=1280980184]
+
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 0
 offset_left = 10.0
@@ -392,7 +395,6 @@ layout_mode = 2
 text = "aaaawagga"
 
 [node name="PauseLayer" type="CanvasLayer" parent="." unique_id=957366646]
-visible = false
 
 [node name="PausePanel" type="Panel" parent="PauseLayer" unique_id=912028623]
 anchors_preset = 8
@@ -410,15 +412,11 @@ theme = ExtResource("10_r1245")
 
 [node name="PauseVbox" type="VBoxContainer" parent="PauseLayer/PausePanel" unique_id=384442870]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -48.5
-offset_top = -25.0
-offset_right = 48.5
-offset_bottom = 25.0
+anchors_preset = -1
+anchor_left = 0.082214765
+anchor_top = 0.093023255
+anchor_right = 0.9177852
+anchor_bottom = 0.90697676
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -427,17 +425,18 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2115988080]
 layout_mode = 2
-text = "heeheehoo"
+size_flags_vertical = 1
+text = "PAUSED"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=1246233509]
+[node name="Label2" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=1908489897]
 layout_mode = 2
-text = "ooheehehee"
+text = "Press 'P' To Unpause"
 horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2046067808]
 layout_mode = 2
-text = "Button that does nothing"
+text = "Quit Game"
 
 [node name="ItemCollectionVolume" parent="." unique_id=409276444 instance=ExtResource("13_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.826765, 2.4615893, -0.73392963)
@@ -468,5 +467,5 @@ position = Vector2(-118, 251)
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/SinglePlayer" to="." method="_on_single_player_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="spawned" from="SpawnPoints" to="." method="_on_multiplayer_spawner_spawned"]
+[connection signal="pressed" from="PauseLayer/PausePanel/PauseVbox/Button" to="." method="_on_Quit_button_pressed"]

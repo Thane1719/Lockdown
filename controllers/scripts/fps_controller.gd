@@ -73,7 +73,10 @@ func _input(event):
 		get_tree().quit()
 	
 	if event.is_action_pressed("debug"):
+		Global.rpc("changeScene", "res://Scenes/Alternate Test World.tscn")
+		await get_tree().process_frame
 		Global.changeScene("res://Scenes/Alternate Test World.tscn")
+		
 
 func _update_camera(delta):
 

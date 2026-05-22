@@ -21,7 +21,7 @@ var teams = {} # peer_id -> "Cop" or "Robber"
 var playercount = 0
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
-var debWin = preload("res://Scenes/Debug.tscn")
+var debWin = preload("res://Menus/Debug.tscn")
 
 func _on_host_button_pressed():
 
@@ -83,6 +83,11 @@ func _ready() -> void:
 	Global.totalValue = 0
 	GUI.hide()
 	print(Input.get_joy_name(0))
+	get_viewport().set_embedding_subwindows(false)
+	
+	#var DebugPanel = debWin.instantiate()
+	#add_child(DebugPanel)
+	#DebugPanel.visible = true
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -203,13 +208,13 @@ func pause(): #this probably isnt the best way to do this but it works
 	elif Global.isPaused == false:
 		pauseHUD.visible = false
 	print(str(Global.isPaused))
-	
 
 
-func _on_guitasktest_pressed() -> void:
-	main_menu.hide()
-	get_tree().change_scene_to_file("res://gameMechanics/hacking_minitask.tscn")
 
+# GUI window code :
+
+var minitask = preload("res://gameMechanics/hacking_minitask.tscn").instantiate()
+var active_instance: Node = null
 
 func _GUI_window_open(_body: Player) -> void:
 	var minitask = preload("res://gameMechanics/hacking_minitask.tscn").instantiate()
@@ -221,3 +226,27 @@ func _GUI_window_open(_body: Player) -> void:
 	if GUI_window != null:
 		GUI_window.emit_signal("close_requested")
 		Global.taskMode = false
+
+
+func _on_Quit_button_pressed() -> void:
+	get_tree().quit()
+	if _body.is_multiplayer_authority():
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE # Release mouse
+		Global.taskMode = true
+		GUI.show()
+		GUI_viewport.add_child(minitask)
+		print("player interacted with minitask")
+
+# player quits window
+		if GUI_window != null:
+			swap_to_new_instance()
+			GUI_window.emit_signal("close_requested")
+			Global.taskMode = false
+			print("player closed minitask")
+
+func swap_to_new_instance():
+	if is_instance_valid(active_instance):
+		active_instance.queue_free()
+		var new_instance = minitask.instantiate()
+		add_child(new_instance)
+		active_instance = new_instance
