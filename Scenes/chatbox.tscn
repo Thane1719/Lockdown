@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://1gk8wgub7vvt"]
+
+[ext_resource type="Script" uid="uid://tr2q5pr3ckes" path="res://scenes/chatbox.gd" id="1_q4hop"]
+
+[node name="chatbox" type="Node2D" unique_id=18944203]
+script = ExtResource("1_q4hop")
+
+[node name="Message" type="LineEdit" parent="." unique_id=570877862]
+offset_left = 118.0
+offset_top = 285.0
+offset_right = 303.0
+offset_bottom = 316.0
+placeholder_text = "message"
+
+[node name="Send" type="Button" parent="." unique_id=463245356]
+offset_left = 118.0
+offset_top = 317.0
+offset_right = 167.0
+offset_bottom = 348.0
+text = "Send"
+
+[node name="aa" type="TextEdit" parent="." unique_id=1225237142]
+offset_left = 118.0
+offset_top = 157.0
+offset_right = 302.0
+offset_bottom = 286.0
+editable = false
+
+[node name="Messages" type="VBoxContainer" parent="." unique_id=260718476]
+offset_left = 121.0
+offset_top = 157.0
+offset_right = 297.0
+offset_bottom = 281.0
+
+[connection signal="pressed" from="Send" to="." method="_on_send_pressed"]

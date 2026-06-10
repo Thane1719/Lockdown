@@ -198,7 +198,6 @@ func take_damage(damage, type, team):
 
 		if Global.playerHealth <= 0:
 			Global.playerHealth = 100
-			global_position = spawnpoint.pick_random().global_position 
 
 
 func updatePlayerModel():

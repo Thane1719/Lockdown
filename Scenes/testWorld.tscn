@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dyf8bobfk30yv" path="res://Scenes/Item pedestal.tscn" id="9_lwfgy"]
 [ext_resource type="PackedScene" uid="uid://currrrlwvf71l" path="res://Scenes/Item Collection Volume.tscn" id="13_dbplf"]
 [ext_resource type="PackedScene" uid="uid://b8crchnkrw0ss" path="res://gameMechanics/Traps/DeathCube.tscn" id="14_0roqs"]
+[ext_resource type="PackedScene" uid="uid://1gk8wgub7vvt" path="res://Scenes/chatbox.tscn" id="14_qagcc"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_u5pdl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -477,6 +478,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.997730
 
 [node name="DeathCube" parent="." unique_id=145201229 instance=ExtResource("14_0roqs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.254775, 1.5444541, 1.8076433)
+
+[node name="chatbox" parent="." unique_id=18944203 instance=ExtResource("14_qagcc")]
 
 [connection signal="body_entered" from="InteractableTest/Area3D" to="." method="_GUI_window_open"]
 [connection signal="close_requested" from="GUIwindow" to="GUIwindow" method="_GUI_window_close"]
