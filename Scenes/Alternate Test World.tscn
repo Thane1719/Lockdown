@@ -102,7 +102,7 @@ material = SubResource("StandardMaterial3D_r1245")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableTest/Area3D" unique_id=1640450757]
 shape = SubResource("BoxShape3D_ftq4a")
 
-[node name="GUIwindow" type="Window" parent="." unique_id=852996940]
+[node name="GUIwindow" type="Window" parent="." unique_id=830631381]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Minitask test"
@@ -112,9 +112,9 @@ transient_to_focused = true
 exclusive = true
 script = ExtResource("2_pfehb")
 
-[node name="GUI" type="CanvasLayer" parent="GUIwindow" unique_id=369167088]
+[node name="GUI" type="CanvasLayer" parent="GUIwindow" unique_id=183574257]
 
-[node name="Panel" type="Panel" parent="GUIwindow/GUI" unique_id=1526777114]
+[node name="Panel" type="Panel" parent="GUIwindow/GUI" unique_id=923370294]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -123,7 +123,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="GUIwindow/GUI/Panel" unique_id=1209374362]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GUIwindow/GUI/Panel" unique_id=1071161576]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,7 +134,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="GUIwindow/GUI/Panel/SubViewportContainer" unique_id=379834479]
+[node name="SubViewport" type="SubViewport" parent="GUIwindow/GUI/Panel/SubViewportContainer" unique_id=1617212057]
 unique_name_in_owner = true
 handle_input_locally = false
 size = Vector2i(900, 500)
@@ -142,7 +142,7 @@ size_2d_override = Vector2i(1150, 650)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="GUIwindow" unique_id=1655151148]
+[node name="Camera3D" type="Camera3D" parent="GUIwindow" unique_id=144988928]
 transform = Transform3D(0.6735674, 0, -0.7391258, 0, 1, 0, 0.7391258, 0, 0.6735674, 1.9815508, 1.2883507, -3.0262659)
 visible = false
 visibility_parent = NodePath("../../InteractableTest")
@@ -460,3 +460,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.676233, 2.624999, 5.997730
 
 [connection signal="body_entered" from="InteractableTest/Area3D" to="." method="_GUI_window_open"]
 [connection signal="close_requested" from="GUIwindow" to="GUIwindow" method="_GUI_window_close"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
+[connection signal="spawned" from="SpawnPoints" to="." method="_on_multiplayer_spawner_spawned"]

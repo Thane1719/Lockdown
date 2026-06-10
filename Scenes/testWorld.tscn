@@ -170,11 +170,6 @@ layout_mode = 2
 placeholder_text = "Enter Address to Join Here"
 alignment = 1
 
-[node name="GUItest" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer" unique_id=1440372615]
-visible = false
-layout_mode = 2
-text = "GUI minitask scene test"
-
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="CanvasLayer" unique_id=323138804]
 stream = ExtResource("3_8b5ia")
 autoplay = true

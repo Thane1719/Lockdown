@@ -15,6 +15,4 @@ func _GUI_window_close() -> void:
 	self.hide()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Global.taskMode = false
-	var player_group = get_tree().get_first_node_in_group("player_group")
-	player_group.is_interacting = false
 	print("player closed minitask")

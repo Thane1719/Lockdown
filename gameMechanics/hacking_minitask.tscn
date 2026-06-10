@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c1wvmwqpcdne2" path="res://gameMechanics/hacking_minitask.gd" id="1_a4q0h"]
 [ext_resource type="Texture2D" path="/home/cindysayer/Downloads/Lockdown-main/icon.svg" id="4_2dyur"]
-[ext_resource type="PackedScene" uid="uid://dsnlvvty67gqu" path="res://gameMechanics/2d_player.tscn" id="4_owrb1"]
 [ext_resource type="Texture2D" uid="uid://buvxdbhao4n7y" path="res://icon.svg" id="4_vim1e"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vim1e"]
@@ -57,10 +56,6 @@ scale = Vector2(3.2820513, 3.5555556)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="reward/Sprite2D/Area2D" unique_id=873807813]
 shape = SubResource("CircleShape2D_vim1e")
-
-[node name="2DPlayer" parent="." unique_id=2084647647 instance=ExtResource("4_owrb1")]
-visible = false
-position = Vector2(112, 549)
 
 [node name="Barriers" type="StaticBody2D" parent="." unique_id=1635634473]
 position = Vector2(545.00006, 508.00006)
