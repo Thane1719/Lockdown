@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cw5iw0tdrx43u" path="res://gameMechanics/guiwindow.gd" id="3_ftq4a"]
 [ext_resource type="PackedScene" uid="uid://5k1o5ctvtah6" path="res://Scenes/enemy.tscn" id="3_nule3"]
 [ext_resource type="Script" uid="uid://da4bqfupciool" path="res://controllers/reticle.gd" id="4_0ddhe"]
+[ext_resource type="Texture2D" uid="uid://c8wkg88dvxlhj" path="res://Textures/1_kNm9rtz-Ud5jmP9qGynmog.webp" id="4_0roqs"]
 [ext_resource type="Theme" uid="uid://de2nek577lf7m" path="res://controllers/Themes/UI/Debug.tres" id="5_lwfgy"]
 [ext_resource type="Script" uid="uid://dvspsmhr73myh" path="res://controllers/scripts/debug_panel.gd" id="6_r1245"]
 [ext_resource type="LabelSettings" uid="uid://dskxen8j6183q" path="res://controllers/materials/Ammo Counter Label Settings.tres" id="7_ftq4a"]
@@ -83,6 +84,7 @@ oversampling_override = 1.0
 title = "Minitask test"
 initial_position = 2
 size = Vector2i(900, 500)
+visible = false
 transient_to_focused = true
 exclusive = true
 script = ExtResource("3_ftq4a")
@@ -123,6 +125,14 @@ visible = false
 visibility_parent = NodePath("../../InteractableTest")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=781029339]
+
+[node name="Loading-img" type="TextureRect" parent="CanvasLayer" unique_id=2100992392]
+visible = false
+offset_right = 1155.0
+offset_bottom = 663.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_0roqs")
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer" unique_id=1311570075]
 anchors_preset = 15
@@ -173,6 +183,15 @@ alignment = 1
 stream = ExtResource("3_8b5ia")
 autoplay = true
 
+[node name="Loading" type="Label" parent="CanvasLayer" unique_id=2091700247]
+visible = false
+anchors_preset = -1
+anchor_right = 0.24000001
+anchor_bottom = 0.23600002
+offset_right = -236.48001
+offset_bottom = -129.92801
+text = "asdfasdfasdfasdfasdfasdfa"
+
 [node name="SpawnPoints2" type="Node3D" parent="." unique_id=863307615]
 
 [node name="Robber" type="Node3D" parent="SpawnPoints2" unique_id=2060114088]
@@ -211,6 +230,7 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="Reticle" type="CenterContainer" parent="UserInterface" unique_id=949750882 node_paths=PackedStringArray("reticleLines")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

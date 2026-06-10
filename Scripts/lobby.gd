@@ -4,6 +4,7 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var hud = $UserInterface
 @onready var myIDref = multiplayer.get_unique_id()
+@onready var loading = $CanvasLayer/Loading
 
 @onready var GUI = $GUIwindow
 @onready var GUI_viewport = %SubViewport
@@ -26,6 +27,7 @@ var debWin = preload("res://Menus/Debug.tscn")
 func _on_host_button_pressed():
 
 	main_menu.hide()
+
 	hud.show()
 
 	enet_peer.create_server(PORT)
@@ -40,7 +42,9 @@ func _on_host_button_pressed():
 func _on_join_button_pressed():
 
 	main_menu.hide()
+	loading.visible = true
 	hud.show()
+
 	if playercount < 4:
 		if address_entry.text == "":
 			enet_peer.create_client("127.0.0.1", PORT)
@@ -50,6 +54,8 @@ func _on_join_button_pressed():
 			multiplayer.multiplayer_peer = enet_peer
 	else:
 		print("TOO MANY PLAYERS!")
+
+	loading.hide()
 
 #func _on_multiplayer_spawner_spawned(node):
 	#if node.is_multiplayer_authority():
