@@ -38,6 +38,11 @@ var cop_count = 0
 var robber_count = 0
 var aliveCopCount = 0
 var aliveRobberCount = 0
+var should_host: bool = false
+var should_join: bool = false
+var player_name: String = ""
+var server_address: String = "127.0.0.1"
+
 
 func updateLabels(clipAmmo, reserveAmmo):
 	clipLabel.text = str(clipAmmo)

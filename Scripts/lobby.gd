@@ -1,146 +1,243 @@
 extends Node
 
+
+const MAX_PLAYERS: int = 4
+const PORT: int = 9999
+
+const NAME_MENU_SCENE_PATH: String = "res://name_menu.tscn"
+
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/PanelContainer/VBoxContainer/AddressEntry
 @onready var hud = $UserInterface
-@onready var myIDref = multiplayer.get_unique_id()
 @onready var loading = $CanvasLayer/Loading
 @onready var menuMusicNode = $CanvasLayer/MenuMusic
 @onready var menuBackground = $"CanvasLayer/Menu Background"
 
 @onready var GUI = $GUIwindow
 @onready var GUI_viewport = %SubViewport
+
 @export var GUI_window: Window
 
-@onready var PlayerScene = preload("res://controllers/fps_controller.tscn")
+@onready var PlayerScene: PackedScene = preload(
+    "res://controllers/fps_controller.tscn"
+)
 
 @onready var cop_spawns = $SpawnPoints2/Cops.get_children()
 @onready var robber_spawns = $SpawnPoints2/Robber.get_children()
 
 @onready var pauseHUD = $PauseLayer
+@onready var money = $%moneyLabel
 
-var tracked = false
-var player
-var teams = {} # peer_id -> "Cop" or "Robber"
+var myIDref: int
 
-# Number of players currently in the game
-var playercount = 0
+var tracked: bool = false
+var player: Node = null
 
-# Maximum number of TOTAL players, including the host
-const MAX_PLAYERS = 4
+var teams: Dictionary = {}
+var playercount: int = 0
 
-const PORT = 9999
+var enet_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 
-var enet_peer = ENetMultiplayerPeer.new()
+var debWin: PackedScene = preload("res://Menus/Debug.tscn")
 
-var debWin = preload("res://Menus/Debug.tscn")
+var trapSetupMode: bool = true
+var totalItems: int = 0
+
+var minitask_scene: PackedScene = preload(
+    "res://gameMechanics/hacking_minitask.tscn"
+)
+
+var active_instance: Node = null
+
+var current_balance = moneyGlobal.get_bank_balance()
 
 
-var trapSetupMode = true
-var totalItems = 0
 
-func _on_host_button_pressed():
+func _on_host_button_pressed() -> void:
+	Global.should_host = true
+	Global.should_join = false
 
-	hideMainMenu()
-	hud.show()
-	
+	Global.server_address = "127.0.0.1"
 
-	# Allow 2 remote clients.
-	# The host counts as the third player.
-	var error = enet_peer.create_server(PORT, MAX_PLAYERS - 1)
+	var error = get_tree().change_scene_to_file(
+		NAME_MENU_SCENE_PATH
+	)
 
 	if error != OK:
-		print("Failed to create server. Error: ", error)
+		Global.should_host = false
+		print("Failed to open Name Menu: ", error)
+
+
+func _on_join_button_pressed() -> void:
+	Global.should_host = false
+	Global.should_join = true
+
+	# Preserve the address entered on the main menu.
+	Global.server_address = address_entry.text.strip_edges()
+
+	if Global.server_address.is_empty():
+		Global.server_address = "127.0.0.1"
+
+	var error = get_tree().change_scene_to_file(
+		NAME_MENU_SCENE_PATH
+	)
+
+	if error != OK:
+		Global.should_join = false
+		print("Failed to open Name Menu: ", error)
+
+
+
+func host_game() -> void:
+	var peer = ENetMultiplayerPeer.new()
+
+	var error = peer.create_server(PORT, MAX_PLAYERS - 1)
+
+	if error != OK:
+		print("Failed to create server: ", error)
 		return
 
-	multiplayer.multiplayer_peer = enet_peer
+	multiplayer.multiplayer_peer = peer
+	enet_peer = peer
 
-	# Listen for players joining/leaving
-	multiplayer.peer_connected.connect(_on_peer_connected)
-	multiplayer.peer_disconnected.connect(remove_player)
+	if not multiplayer.peer_connected.is_connected(
+		_on_peer_connected
+	):
+		multiplayer.peer_connected.connect(
+			_on_peer_connected
+		)
 
-	# Add the host as the first player
+	if not multiplayer.peer_disconnected.is_connected(
+		remove_player
+	):
+		multiplayer.peer_disconnected.connect(
+			remove_player
+		)
+
 	add_player(multiplayer.get_unique_id())
 
-	print("Server started.")
+	print("Server started successfully!")
 	print("Maximum players: ", MAX_PLAYERS)
+
 	loading.visible = false
 
-func _on_join_button_pressed():
-	hideMainMenu()
-	hud.show()
 
-	var error
+func join_game() -> void:
+	var peer = ENetMultiplayerPeer.new()
 
-	if address_entry.text == "":
-		error = enet_peer.create_client("127.0.0.1", PORT)
-	else:
-		error = enet_peer.create_client(address_entry.text, PORT)
+	var address = Global.server_address.strip_edges()
+
+	if address.is_empty():
+		address = "127.0.0.1"
+
+	var error = peer.create_client(address, PORT)
 
 	if error != OK:
-		print("Failed to create client. Error: ", error)
+		print("Failed to create client: ", error)
 		return
 
-	multiplayer.multiplayer_peer = enet_peer
+	multiplayer.multiplayer_peer = peer
+	enet_peer = peer
 
-	loading.visible = false
+	if not multiplayer.server_disconnected.is_connected(
+		_on_server_disconnected
+	):
+		multiplayer.server_disconnected.connect(
+			_on_server_disconnected
+		)
+
+	print("Connecting to server: ", address)
+
+
+func _on_server_disconnected() -> void:
+	print("Disconnected from the server.")
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+	myIDref = multiplayer.get_unique_id()
+
 	Global.reserveLabel = %Reserve
 	Global.interactionLabel = %InteractionLabel
 	Global.clipLabel = %Clip
 	Global.pointsLabel = %TotalValue
 	Global.healthLabel = %Health
+
 	Global.totalValue = 0
+
 	GUI.hide()
-	if Global.isMainMenu == false:
-		main_menu.hide()
-		hud.show()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	print(Input.get_joy_name(0))
+
 	get_viewport().set_embedding_subwindows(false)
+
 	Global.recreatePlayers()
 	Global.updateSpawnPoints(cop_spawns, robber_spawns)
 	Global.respawnPlayers()
-	menuMusicNode.playing = true
-	
+
 	update_money_display()
 
-	
-	#var DebugPanel = debWin.instantiate()
-	#add_child(DebugPanel)
-	#DebugPanel.visible = true
+	# Host or join after returning from the Name Menu.
+	if Global.should_host:
+		Global.should_host = false
 
-func _on_peer_connected(peer_id: int):
+		main_menu.hide()
+		hud.show()
 
+		menuBackground.hide()
+		menuMusicNode.playing = false
+
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+		host_game()
+
+	elif Global.should_join:
+		Global.should_join = false
+
+		main_menu.hide()
+		hud.show()
+
+		menuBackground.hide()
+		menuMusicNode.playing = false
+
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+		join_game()
+
+	elif Global.isMainMenu == false:
+		main_menu.hide()
+		hud.show()
+
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	else:
+		menuMusicNode.playing = true
+
+	print(Input.get_joy_name(0))
+
+
+
+func _on_peer_connected(peer_id: int) -> void:
 	print("Peer connected: ", peer_id)
 
-	# This check is performed on the server.
-	# If there are already 4 players, reject the new player.
-	if !multiplayer.is_server():
+	if not multiplayer.is_server():
 		return
 
 	if playercount >= MAX_PLAYERS:
-		print("LOBBY FULL! Rejecting peer: ", peer_id)
+		print("Lobby full. Rejecting peer: ", peer_id)
 
-		# Disconnect the fourth player
 		multiplayer.multiplayer_peer.disconnect_peer(peer_id)
-
 		return
 
-	# There is room, so add the player
 	add_player(peer_id)
 
 
-
-
-func add_player(peer_id: int):
-
-	# Safety check
+func add_player(peer_id: int) -> void:
 	if playercount >= MAX_PLAYERS:
 		print("Cannot add player. Lobby is full.")
+		return
+
+	if has_node(str(peer_id)):
+		print("Player already exists: ", peer_id)
 		return
 
 	var new_player = PlayerScene.instantiate()
@@ -151,59 +248,50 @@ func add_player(peer_id: int):
 
 	new_player.set_multiplayer_authority(peer_id)
 
-	# Assign Cop or Robber
 	assign_team(peer_id)
 
 	tracked = true
 
-	# Increase player count
 	playercount += 1
 
 	print("Player ", peer_id, " joined.")
-	print("Playercount is ", playercount, "/", MAX_PLAYERS)
-	print(multiplayer.get_unique_id())
+	print("Playercount: ", playercount, "/", MAX_PLAYERS)
+
 	Global.playerJoined.emit()
 
 
-
-
-func remove_player(peer_id: int):
-
+func remove_player(peer_id: int) -> void:
 	print("Player ", peer_id, " disconnected.")
 
-	player = get_node_or_null(str(peer_id))
+	var player_node = get_node_or_null(str(peer_id))
 
-	if player:
-		player.queue_free()
+	if player_node:
+		player_node.queue_free()
 
-	# Remove them from the team dictionary
 	if teams.has(peer_id):
 		teams.erase(peer_id)
 
-	# Decrease player count
-	playercount -= 1
+	playercount = max(playercount - 1, 0)
 
-	# Prevent negative values
-	playercount = max(playercount, 0)
-
-	print("Playercount is ", playercount, "/", MAX_PLAYERS)
+	print("Playercount: ", playercount, "/", MAX_PLAYERS)
 
 
-func _on_single_player_button_pressed():
 
+
+func _on_single_player_button_pressed() -> void:
 	main_menu.hide()
+	menuBackground.hide()
 	hud.show()
 
-	var my_id = multiplayer.get_unique_id()
+	menuMusicNode.stop()
 
-	add_player(my_id)
+	add_player(multiplayer.get_unique_id())
 
 
 
-func assign_team(id):
 
-	# Only the server assigns teams
-	if !multiplayer.is_server():
+func assign_team(id: int) -> void:
+	if not multiplayer.is_server():
 		return
 
 	Global.cop_count = 0
@@ -211,17 +299,16 @@ func assign_team(id):
 	Global.aliveCopCount = 0
 	Global.aliveRobberCount = 0
 
-	for t in teams.values():
-
-		if t == "Cop":
+	for team_name in teams.values():
+		if team_name == "Cop":
 			Global.cop_count += 1
 			Global.aliveCopCount += 1
 
-		elif t == "Robber":
+		elif team_name == "Robber":
 			Global.robber_count += 1
 			Global.aliveRobberCount += 1
 
-	var team
+	var team: String
 
 	if Global.cop_count > Global.robber_count:
 		team = "Robber"
@@ -229,82 +316,85 @@ func assign_team(id):
 	elif Global.robber_count > Global.cop_count:
 		team = "Cop"
 
-
 	else:
 		team = "Cop" if randi() % 2 == 0 else "Robber"
 
 	teams[id] = team
 
 	print("Player ", id, " assigned to ", team)
-	
+
 	if team == "Cop":
 		Global.aliveCopCount += 1
-		print("COP IS ALIVE")
+
 	elif team == "Robber":
 		Global.aliveRobberCount += 1
-		print("ROBBER IS ALOVE")
 
-	# Update local player's team
 	if id == multiplayer.get_unique_id():
-
 		Global.myCurrentTeam = team
-		Global.player.updatePlayerModel()
 
-	# Tell all clients the team assignment
-	rpc("receive_team_assignment", id, team)
+		if Global.player != null:
+			Global.player.updatePlayerModel()
 
-	# Spawn player
+	receive_team_assignment.rpc(id, team)
+
 	spawn_player(id, team)
 
 
-func spawn_player(id, team):
 
+func spawn_player(id: int, team: String) -> void:
 	var player_node = get_node_or_null(str(id))
 
 	if player_node == null:
 		print("Could not find player node: ", id)
 		return
 
-	var spawn_point
+	var spawn_point: Node3D
 
 	if team == "Cop":
+		if cop_spawns.is_empty():
+			print("No Cop spawn points available.")
+			return
 
 		spawn_point = cop_spawns.pick_random()
-
 		Global.player.spawnpoint = cop_spawns
 
 	else:
+		if robber_spawns.is_empty():
+			print("No Robber spawn points available.")
+			return
 
 		spawn_point = robber_spawns.pick_random()
-
 		Global.player.spawnpoint = robber_spawns
 
 	player_node.global_position = spawn_point.global_position
 
 
-
-@rpc("any_peer", "reliable")
-func receive_team_assignment(id, team):
-
+@rpc("authority", "call_local", "reliable")
+func receive_team_assignment(id: int, team: String) -> void:
 	teams[id] = team
 
 	if id == multiplayer.get_unique_id():
-
 		Global.myCurrentTeam = team
-		Global.player.updatePlayerModel()
+
+		if Global.player != null:
+			Global.player.updatePlayerModel()
 
 	var player_node = get_node_or_null(str(id))
 
 	if player_node == null:
 		return
 
-	var spawn_point
+	var spawn_point: Node3D
 
 	if team == "Cop":
+		if cop_spawns.is_empty():
+			return
 
 		spawn_point = cop_spawns.pick_random()
 
 	else:
+		if robber_spawns.is_empty():
+			return
 
 		spawn_point = robber_spawns.pick_random()
 
@@ -312,191 +402,163 @@ func receive_team_assignment(id, team):
 
 
 
-
-func upnp_setup():
-
+func upnp_setup() -> void:
 	var upnp = UPNP.new()
 
 	var discover_result = upnp.discover()
 
-	assert(
-		discover_result == UPNP.UPNP_RESULT_SUCCESS,
-		"UPNP Discover Failed! Error %s" % discover_result
-	)
+	if discover_result != UPNP.UPNP_RESULT_SUCCESS:
+		print("UPNP discovery failed: ", discover_result)
+		return
 
-	assert(
-		upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(),
-		"UPNP Invalid Gateway!"
-	)
+	if not upnp.get_gateway() or not upnp.get_gateway().is_valid_gateway():
+		print("UPNP invalid gateway.")
+		return
 
 	var map_result = upnp.add_port_mapping(PORT)
 
-	assert(
-		map_result == UPNP.UPNP_RESULT_SUCCESS,
-		"UPNP Port Mapping Failed! Error %s" % map_result
-	)
+	if map_result != UPNP.UPNP_RESULT_SUCCESS:
+		print("UPNP port mapping failed: ", map_result)
+		return
 
-	print("Success! Join Address: %s" % upnp.query_external_address())
-
+	print("Join Address: ", upnp.query_external_address())
 
 
-func _physics_process(delta):
 
-
+func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("PauseMenu"):
-
 		pause()
 
 
-
-func _unhandled_input(_event):
-
+func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
-
 		get_tree().quit()
 
 
-
-func pause():
-
+func pause() -> void:
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		Global.isPaused = true
 
 	elif Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
-
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		Global.isPaused = false
 
-	if Global.isPaused == true:
-
-		pauseHUD.visible = true
-
-	else:
-
-		pauseHUD.visible = false
-
-	print(str(Global.isPaused))
-
+	pauseHUD.visible = Global.isPaused
 
 
 func _on_Quit_button_pressed() -> void:
-
 	get_tree().quit()
 
 
-
-var minitask = preload("res://gameMechanics/hacking_minitask.tscn").instantiate()
-
-var active_instance: Node = null
+func _on_exit_game_pressed() -> void:
+	get_tree().quit()
 
 
 func _GUI_window_open(_body: Player) -> void:
+	if not _body.is_multiplayer_authority():
+		return
 
-	if _body.is_multiplayer_authority():
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Global.taskMode = true
 
-		Global.taskMode = true
+	GUI.show()
 
-		GUI.show()
+	swap_to_new_instance()
 
-		GUI_viewport.add_child(minitask)
 
-		print("player interacted with minitask")
-
-		# Player quits window
-
-		if GUI_window != null:
-
-			swap_to_new_instance()
-
-			GUI_window.emit_signal("close_requested")
-
-			Global.taskMode = false
-
-			print("player closed minitask")
-
-func swap_to_new_instance():
-
+func swap_to_new_instance() -> void:
 	if is_instance_valid(active_instance):
-
 		active_instance.queue_free()
 
-	var new_instance = minitask.instantiate()
+	var new_instance = minitask_scene.instantiate()
 
-	add_child(new_instance)
+	GUI_viewport.add_child(new_instance)
 
 	active_instance = new_instance
 
 
-func _on_exit_game_pressed() -> void:
-
-	get_tree().quit()
-
-func showAnnounceText(text : String):
+func showAnnounceText(text: String) -> void:
 	var announceBox = $"UserInterface/Spawn Text"
 	var announceLabel = %AnnounceLabel
+
 	announceLabel.text = text
 	announceBox.show()
-	await get_tree().create_timer(3.0).timeout
-	announceBox.hide()
 
-@rpc("reliable", "any_peer")
-func exitTrapSetup():
-	if trapSetupMode == true:
+	await get_tree().create_timer(3.0).timeout
+
+	if is_instance_valid(announceBox):
+		announceBox.hide()
+
+
+@rpc("any_peer", "reliable")
+func exitTrapSetup() -> void:
+	if trapSetupMode:
 		trapSetupMode = false
+
 		Global.roundReset.emit()
 		Global.respawnPlayers()
+
 		showAnnounceText("Rob stuff I guess")
 
-func resetRound():
+
+func resetRound() -> void:
 	Global.roundReset.emit()
 	Global.respawnPlayers()
+
 	trapSetupMode = true
-	rpc("recieveReset")
-	if Global.myCurrentTeam == "Cop":
-		showAnnounceText("Trap setup mode")
-		
-@rpc("reliable", "any_peer")
-func recieveReset():
-	Global.roundReset.emit()
-	Global.respawnPlayers()
-	trapSetupMode = true
+
+	recieveReset.rpc()
+
 	if Global.myCurrentTeam == "Cop":
 		showAnnounceText("Trap setup mode")
 
-@rpc("reliable", "call_local", "any_peer")
-func updateAlivePlayers(team):
-	if multiplayer.get_unique_id() == 1:
-		if team == "Cop":
-			Global.aliveCopCount -= 1
-		elif team == "Robber":
-			Global.aliveRobberCount -= 1
-		
-		if Global.aliveCopCount <= 0 or Global.aliveRobberCount <= 0:
-			Global.aliveCopCount = 0
-			Global.aliveRobberCount = 0
-			for t in teams.values():
 
-				if t == "Cop":
-					Global.aliveCopCount += 1
+@rpc("any_peer", "call_local", "reliable")
+func recieveReset() -> void:
+	Global.roundReset.emit()
+	Global.respawnPlayers()
 
-				elif t == "Robber":
-					Global.aliveRobberCount += 1
-			resetRound()
+	trapSetupMode = true
 
-func hideMainMenu():
+	if Global.myCurrentTeam == "Cop":
+		showAnnounceText("Trap setup mode")
+
+
+@rpc("any_peer", "call_local", "reliable")
+func updateAlivePlayers(team: String) -> void:
+	if multiplayer.get_unique_id() != 1:
+		return
+
+	if team == "Cop":
+		Global.aliveCopCount -= 1
+
+	elif team == "Robber":
+		Global.aliveRobberCount -= 1
+
+	if Global.aliveCopCount <= 0 or Global.aliveRobberCount <= 0:
+		Global.aliveCopCount = 0
+		Global.aliveRobberCount = 0
+
+		for team_name in teams.values():
+			if team_name == "Cop":
+				Global.aliveCopCount += 1
+
+			elif team_name == "Robber":
+				Global.aliveRobberCount += 1
+
+		resetRound()
+
+
+func hideMainMenu() -> void:
 	menuMusicNode.playing = false
 	loading.visible = true
 	menuBackground.visible = false
 	main_menu.hide()
 
-# Money balance
-var current_balance = moneyGlobal.get_bank_balance()
-@onready var money = $%moneyLabel
 
 func update_money_display() -> void:
 	money.text = "Money: " + str(current_balance)
-	print("Player wallet: " + str(current_balance))
+
+	print("Player wallet: ", current_balance)
