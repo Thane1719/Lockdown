@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://bjc5hdqafq1t8"]
 
 [ext_resource type="Texture2D" uid="uid://b8c4woxccl27v" path="res://Textures/Menu Background.png" id="1_aprvy"]
+[ext_resource type="Script" uid="uid://dj225g3aptovk" path="res://name_menu.gd" id="1_up2mf"]
 [ext_resource type="Script" uid="uid://cdlno4f1n3t8w" path="res://start_button.gd" id="2_ydvnj"]
 
 [node name="Name menu" type="Node" unique_id=438876811]
+script = ExtResource("1_up2mf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1774075326]
 

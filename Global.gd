@@ -41,6 +41,8 @@ var aliveRobberCount = 0
 var should_host: bool = false
 var should_join: bool = false
 var player_name: String = ""
+var name_entered: bool = false
+var skip_lobbymenu: bool = false
 var server_address: String = "127.0.0.1"
 
 
