@@ -5,8 +5,9 @@
 
 [resource]
 script = ExtResource("2_e4co1")
-name = &"Gold Bar"
+name = &"Diamond"
 Damage = 0
+weight = 2
 clip = 0
 maxClip = 0
 reserve = 0

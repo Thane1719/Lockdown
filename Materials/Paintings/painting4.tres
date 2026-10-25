@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://btr38b5stif7v"]
+
+[ext_resource type="Texture2D" uid="uid://k3lxw6up8rry" path="res://Materials/Paintings/The lakeside tower.png" id="1_fhair"]
+
+[resource]
+resource_name = "Painting Image"
+cull_mode = 2
+albedo_texture = ExtResource("1_fhair")
+roughness = 0.5
+uv1_scale = Vector3(0.825, 0.825, 0.825)
+uv1_offset = Vector3(0.094, 0, 0)

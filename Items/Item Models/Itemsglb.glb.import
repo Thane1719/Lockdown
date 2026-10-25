@@ -41,14 +41,23 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "meshes": {
-"Itemsglb_Gem": {
+"Itemsglb_Amythest": {
 "generate/lightmap_uv": 0,
 "generate/lods": 0,
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Gem.res",
-"save_to_file/path": "uid://b5r4ywmmqkix1"
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Amythest.res",
+"save_to_file/path": "uid://dlppdkdbgb15q"
+},
+"Itemsglb_Emerald": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Emerald.res",
+"save_to_file/path": "uid://cnddbtgo4xb2f"
 },
 "Itemsglb_Goldbar": {
 "generate/lightmap_uv": 0,
@@ -67,6 +76,42 @@ _subresources={
 "save_to_file/enabled": true,
 "save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Painting.res",
 "save_to_file/path": "uid://b5fq3k84tokbk"
+},
+"Itemsglb_Potion": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Potion.res",
+"save_to_file/path": "uid://cpbdh3udf7xlf"
+},
+"Itemsglb_Ruby": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Ruby.res",
+"save_to_file/path": "uid://hf1jl0ebh4i5"
+},
+"Itemsglb_Star": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Star.res",
+"save_to_file/path": "uid://dpr5vdgsoooxw"
+},
+"Itemsglb_Vase1": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://Items/Item Models/Itemsglb_Vase1.res",
+"save_to_file/path": "uid://brgo17jyk5v5g"
 }
 }
 }

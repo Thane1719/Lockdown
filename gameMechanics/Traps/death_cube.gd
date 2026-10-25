@@ -1,5 +1,5 @@
 extends Node3D
-
+var damage : int = 25
 var dangerous = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -37,7 +37,8 @@ func updateCube():
 func _on_death_cube_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		if dangerous == true:
-			print ("OH DEAR")
+			if body.has_method("take_damage"):
+				body.take_damage(damage, "bullet")
 		elif dangerous == false:
 			print ("everythings fine")
 	else: pass

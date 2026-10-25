@@ -3,10 +3,15 @@
 [ext_resource type="Script" uid="uid://g6ckle7n46f0" path="res://Scripts/ItemCollectionVolume.gd" id="1_b8kcc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dy61o"]
-size = Vector3(4, 1, 4)
+size = Vector3(6, 1, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pd8e2"]
+transparency = 1
+albedo_color = Color(1, 1, 0.22745098, 0.15686275)
 
 [sub_resource type="BoxMesh" id="BoxMesh_b8kcc"]
-size = Vector3(4, 0.25, 4)
+material = SubResource("StandardMaterial3D_pd8e2")
+size = Vector3(6, 0.25, 6)
 
 [node name="ItemCollectionVolume" type="Node3D" unique_id=409276444]
 script = ExtResource("1_b8kcc")

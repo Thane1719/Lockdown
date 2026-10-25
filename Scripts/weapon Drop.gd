@@ -7,6 +7,7 @@ extends RigidBody3D
 @onready var weaponShadow : MeshInstance3D = %WeaponShadow
 @onready var weaponParent = $Weapon
 @onready var collision = $CollisionShape3D
+@onready var multiplayer_synchronizer = $MultiplayerSynchronizer
 
 @export var objectName : String = ""
 @export_file("*.tres") var weaponPath
@@ -33,6 +34,7 @@ func _ready():
 		setModel(weaponPath)
 	Global.roundReset.connect(deleteWeaponDrop)
 	Global.playerJoined.connect(deleteWeaponDrop)
+	Global.joinButtonPressed.connect(deleteWeaponDrop)
 	
 
 
@@ -42,11 +44,12 @@ func update():
 
 func interact():
 	Global.weaponManager.addWeapon(weaponPath, defaultStats, clip, reserve)
-	deleteWeaponDrop()
 	rpc("deleteWeaponDrop")
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func deleteWeaponDrop():
+	multiplayer_synchronizer.public_visibility = false
+	await get_tree().physics_frame 
 	queue_free()
 
 func setWeapon(path):

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Weapons" format=3 uid="uid://er7gyk515f22"]
+
+[ext_resource type="ArrayMesh" uid="uid://cpnej0n255k28" path="res://Items/Item Models/Itemsglb_Vase1.res" id="1_1r5np"]
+[ext_resource type="Script" uid="uid://c0afljd65dkhp" path="res://Weapons/Weapons.gd" id="2_wd1w7"]
+
+[resource]
+script = ExtResource("2_wd1w7")
+name = &"Vase"
+Damage = 0
+weight = 4
+clip = 0
+maxClip = 0
+reserve = 0
+maxReserve = 0
+rpm = 0
+price = 150
+bulletScene = "<null>"
+position = Vector3(0.25, -0.2, -0.2)
+mesh = ExtResource("1_1r5np")
+metadata/_custom_type_script = "uid://c0afljd65dkhp"

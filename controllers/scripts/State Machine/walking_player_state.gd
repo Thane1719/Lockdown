@@ -29,7 +29,7 @@ func update(delta):
 	if PLAYER.velocity.length() == 0.0:
 		transition.emit("IdlePlayerState")
 
-	if Input.is_action_pressed("sprint") and PLAYER.is_on_floor() and PLAYER.stamina >= 15:
+	if Input.is_action_pressed("sprint") and PLAYER.is_on_floor() and PLAYER.stamina >= 25:
 		transition.emit("SprintingPlayerState")
 
 	if Input.is_action_just_pressed("crouch") and PLAYER.is_on_floor():

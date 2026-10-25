@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody3D
 
 @export var JUMP_VELOCITY : float = 4.5
-@export var MOUSE_SENSITIVITY : float = 0.5
+
 @export var controllerSensitivity = 2
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
@@ -12,7 +12,8 @@ var hasInstancedTrap = false
 @export_file("*.tscn") var currentHeldTrap = "":
 	set(value):
 		currentHeldTrap = value
-		loadedTrap = load(currentHeldTrap)
+		if currentHeldTrap: 
+			loadedTrap = load(currentHeldTrap)
 
 @onready var CAMERA_CONTROLLER : Camera3D = $CameraController/Camera3D
 @onready var ANIMATIONPLAYER : AnimationPlayer = $AnimationPlayer
@@ -25,7 +26,10 @@ var hasInstancedTrap = false
 @onready var robberModel = $"CollisionShape3D/Robber model"
 @onready var damageVignette = $CameraController/Camera3D/CanvasLayer/damageVignette
 @onready var interactionCast = %trapPlaceCast
+@onready var trapPlaceCast = %trapPlaceCast
+@onready var healDelayTimer = $"Heal Delay"
 
+var MOUSE_SENSITIVITY : float = 0.125
 var _mouse_input : bool = false
 var _rotation_input : float
 var _tilt_input : float
@@ -36,13 +40,18 @@ var isCrouching : bool = false
 
 var currentRotation : float
 var cameraOffset : Vector3
-var sceneChanged = true
 var spawnpoint
 
 var gravity = 12
 var stamina = 100
 
 var is_interacting: bool = false
+var autoHealing = false
+
+var mapFiles = [
+	"res://Maps/OverUnder.tscn",
+	"res://Maps/gallery.tscn"
+]
 
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
@@ -65,7 +74,10 @@ func _ready():
 	CROUCH_SHAPECAST.add_exception(self)
 	Global.isMainMenu = false
 	playerlabelname.text = str(multiplayer.get_unique_id())
-	
+	weaponGlobal.weaponAmmoInventory = [[0,0], [0,0]]
+	weaponGlobal.weaponInventory = ["res://Weapons/Empty Weapon.tres","res://Weapons/Empty Weapon.tres"]
+	Global.weaponManager.loadWeapon()
+	Global.weaponManager.addWeapon("res://Weapons/Blaster.tres", true, 0, 0)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -83,21 +95,13 @@ func _input(event):
 
 	if not is_multiplayer_authority():
 		return
-
-	if event.is_action_pressed("exit"):
-		get_tree().quit()
 	
 	if event.is_action_pressed("debug"):
-		if sceneChanged == true:
-			Global.rpc("changeScene", "res://Scenes/Alternate Test World.tscn")
+		if get_tree().current_scene.scene_file_path == "res://Scenes/lobby.tscn":
+			var pickedMap = mapFiles.pick_random()
+			Global.rpc("changeScene", pickedMap)
 			await get_tree().process_frame
-			Global.changeScene("res://Scenes/Alternate Test World.tscn")
-			sceneChanged = !sceneChanged
-		else:
-			Global.rpc("changeScene", "res://Scenes/testWorld.tscn")
-			await get_tree().process_frame
-			Global.changeScene("res://Scenes/testWorld.tscn")
-			sceneChanged = !sceneChanged
+			Global.changeScene(pickedMap)
 
 func _update_camera(delta):
 
@@ -166,11 +170,12 @@ func _process(delta: float) -> void:
 	cameraOffset = lerp(cameraOffset, Vector3(0,0,0), 0.05)
 	damageVignette.material.set_shader_parameter("intensity", move_toward(damageVignette.material.get_shader_parameter("intensity"), 0.0, 0.01))  
 
-	if stamina < 101 and stateMachine.currentState != $PlayerStateMachine/SprintingPlayerState:
-		stamina += ceil(16.5 * delta)
+	if stamina < 101 and stateMachine.currentState != $PlayerStateMachine/SprintingPlayerState and stateMachine.currentState != $PlayerStateMachine/JumpingPlayerState:
+		stamina += 0.15
+	Global.staminaBar.value = stamina
+	
 
 	if Input.is_action_just_pressed("debugAction"):
-		print("SET TRAPPEPD")
 		currentHeldTrap = "res://trapSystem/sawbladeTrap.tscn"
 
 func updateGravity(delta) -> void:
@@ -211,19 +216,28 @@ func updateVelocity() -> void:
 
 	move_and_slide()
 
+func spawnSpectate():
+	if Global.myCurrentTeam == "Cop":
+		position = get_tree().root.get_node("World").copsSpectateLocation.global_position
+	else:
+		position = get_tree().root.get_node("World").robbersSpectateLocation.global_position
+
 
 @rpc("any_peer")
 func take_damage(damage, type, team):
+	if not is_multiplayer_authority():
+		return
 	if team != Global.myCurrentTeam:
-
 		Global.playerHealth -= damage
+		autoHealing = false
+		healDelayTimer.start(6)
 		damageVignette.material.set_shader_parameter("intensity", damageVignette.material.get_shader_parameter("intensity") + 0.25)
 		damageVignette.material.set_shader_parameter("intensity", clampf(damageVignette.material.get_shader_parameter("intensity"), 0.0, 0.75))  
 		Global.updateHealth()
 
 		if Global.playerHealth <= 0:
 			Global.playerHealth = 100
-			position.z += 100
+			spawnSpectate()
 			damageVignette.material.set_shader_parameter("intensity", 1.0)
 			if multiplayer.get_unique_id() != 1:
 				get_node("/root/World").updateAlivePlayers.rpc(Global.myCurrentTeam)
@@ -237,8 +251,7 @@ func updatePlayerModel():
 	elif Global.myCurrentTeam == "Robber":
 		robberModel.visible = true
 
-func placeTrap():
-	pass
+
 
 func holdingTrap():
 	if Global.myCurrentTeam == "Cop":
@@ -252,25 +265,37 @@ func holdingTrap():
 				get_tree().root.get_node("World").add_child(trapInstance)
 				hasInstancedTrap = true
 				#rpc("replicateTrapPlacement", currentHeldTrap, trapName)
+				trapPlaceCast.add_exception(trapInstance)
+				for child in trapInstance.find_children("*", "CollisionObject3D", true, false):
+					trapPlaceCast.add_exception(child)
 			if trapInstance != null:
-				if interactionCast.is_colliding():
-					trapInstance.global_position = interactionCast.get_collision_point()
+				if trapPlaceCast.is_colliding():
+					trapInstance.global_position = trapPlaceCast.get_collision_point()
 				else:
-					trapInstance.global_position = interactionCast.global_position + interactionCast.global_transform.basis * interactionCast.target_position
+					trapInstance.global_position = trapPlaceCast.global_position + trapPlaceCast.global_transform.basis * trapPlaceCast.target_position
+				trapInstance.look_at(global_position, Vector3.UP)
+				trapInstance.rotation.x = 0
+				trapInstance.rotation.z = 0
+
 				if Input.is_action_just_pressed("interact"):
+					rpc("replicateTrapPlacement", currentHeldTrap, trapInstance.name, trapInstance.global_position, trapInstance.rotation)
 					trapInstance = null
 					loadedTrap = null
 					hasInstancedTrap = false
-#@rpc("any_peer")
-#func replicateTrapPlacement(trapPath, trapName):
-	#var clientTrapLoad = load(trapPath)
-	#var trapInstanceClient = clientTrapLoad.instantiate()
-	#trapInstanceClient.name = trapName
-	#get_tree().root.get_node("World").add_child(trapInstanceClient)
-#THIS NEEDS UPDATING TO NEW UI PLEASE
-#WILL BE ANNOUNCEMENT TEXT NOT LEVEL CHANGE
-#func showLevelText(spawnText):
-	#%"Spawn Label".text = spawnText
-	#animationPlayer.play("Level Fade", -1, 1, false)
-	#await animationPlayer.animation_finished
-	#animationPlayer.play("Level Fade", -1, -1, true)
+@rpc("any_peer")
+func replicateTrapPlacement(trapPath, trapName, trapPos, traprot):
+	var clientTrapLoad = load(trapPath)
+	var trapInstanceClient = clientTrapLoad.instantiate()
+	trapInstanceClient.name = trapName
+	trapInstanceClient.global_position = trapPos
+	trapInstanceClient.rotation = traprot
+	get_tree().root.get_node("World").add_child(trapInstanceClient)
+
+
+func _on_heal_delay_timeout() -> void:
+	autoHealing = true
+
+
+func _on_healing_tick_timeout() -> void:
+	if Global.playerHealth < 100 and autoHealing:
+		Global.playerHealth += 1

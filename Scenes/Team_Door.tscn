@@ -1,9 +1,17 @@
 [gd_scene format=3 uid="uid://dedl2xmulv57u"]
 
 [ext_resource type="Script" uid="uid://cxwooaaaxthw0" path="res://Scripts/team_door.gd" id="1_vaedh"]
+[ext_resource type="Material" uid="uid://fpgiqq8ummwa" path="res://Materials/Dev material Glass.tres" id="2_b5js2"]
+[ext_resource type="Material" uid="uid://b3pgvj3gutf65" path="res://Materials/Dev material 4.tres" id="3_d0nxn"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4u88d"]
+size = Vector3(0.25, 1, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_eqax0"]
-size = Vector3(0.25, 3, 4)
+size = Vector3(0.25, 3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5li4w"]
+size = Vector3(0.25, 2, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xpc2p"]
 size = Vector3(0.5, 3, 4)
@@ -17,7 +25,28 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=713683759]
+material_override = ExtResource("2_b5js2")
+mesh = SubResource("BoxMesh_4u88d")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=1482011549]
+transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+material_override = ExtResource("3_d0nxn")
 mesh = SubResource("BoxMesh_eqax0")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StaticBody3D" unique_id=1127748838]
+transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+material_override = ExtResource("3_d0nxn")
+mesh = SubResource("BoxMesh_eqax0")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="StaticBody3D" unique_id=1857201917]
+transform = Transform3D(1.1, -4.371139e-08, 4.371139e-08, 4.8082526e-08, -4.371139e-08, -1, 4.8082526e-08, 1, -4.3711385e-08, 0, -1, 0)
+material_override = ExtResource("3_d0nxn")
+mesh = SubResource("BoxMesh_5li4w")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="StaticBody3D" unique_id=953014103]
+transform = Transform3D(1.1, -4.371139e-08, 4.371139e-08, 4.8082526e-08, -4.371139e-08, -1, 4.8082526e-08, 1, -4.3711385e-08, 0, 1, 0)
+material_override = ExtResource("3_d0nxn")
+mesh = SubResource("BoxMesh_5li4w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=741047985]
 shape = SubResource("BoxShape3D_xpc2p")

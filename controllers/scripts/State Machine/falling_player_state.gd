@@ -25,9 +25,3 @@ func update(delta: float) -> void:
 
 	if Input.is_action_just_pressed("shoot"):
 		weapon.shoot()
-
-	if Input.is_action_just_pressed("crouch") and !PLAYER.is_on_floor():
-		transition.emit("SlammingPlayerState")
-
-	if Input.is_action_just_pressed("sprint") and PLAYER.stamina >= 33:
-		transition.emit("DashingPlayerState")

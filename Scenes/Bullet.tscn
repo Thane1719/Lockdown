@@ -16,6 +16,7 @@ height = 1.0
 script = ExtResource("1_la7i4")
 
 [node name="Bullet Mesh" type="CSGCombiner3D" parent="." unique_id=595424049]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="Bullet Mesh" unique_id=824582207]
 transform = Transform3D(1.91069e-15, -6.55671e-08, 1, -1, -6.55671e-08, 3.9443e-30, 4.37114e-08, -1.5, -4.37114e-08, 0, 0, -0.1)
@@ -32,7 +33,7 @@ sides = 16
 material = SubResource("StandardMaterial3D_sx3c2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=248620168]
-transform = Transform3D(-4.37114e-08, -4.37114e-08, 1, -1, -8.74228e-08, -4.37114e-08, 8.74228e-08, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-1.748456e-08, -1.748456e-08, 0.4, -0.4, -3.496912e-08, -1.748456e-08, 3.496912e-08, -0.4, -1.748456e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_2dgri")
 
 [node name="Timer" type="Timer" parent="." unique_id=2140026371]

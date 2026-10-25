@@ -1,11 +1,11 @@
 extends Area3D
 
-var speed : float = 48.0
+var speed : float = 32.0
 var damage : int = 25
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Timer.start(5)
+	$Timer.start(3)
 	await $Timer.timeout
 	destroy()
 
@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body.has_method("take_damage"):
-		body.take_damage(damage, "bullet")
+		body.take_damage(damage, "trap", "Cop")
 	destroy()
 
 func destroy():

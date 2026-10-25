@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Weapons" format=3 uid="uid://c2qpy0gfplb45"]
+
+[ext_resource type="ArrayMesh" uid="uid://cm1ky0usqinu6" path="res://Items/Item Models/Itemsglb_Star.res" id="1_m4umm"]
+[ext_resource type="Script" uid="uid://c0afljd65dkhp" path="res://Weapons/Weapons.gd" id="2_istq6"]
+
+[resource]
+script = ExtResource("2_istq6")
+name = &"Star gem"
+Damage = 0
+weight = 2
+clip = 0
+maxClip = 0
+reserve = 0
+maxReserve = 0
+rpm = 0
+price = 150
+bulletScene = "<null>"
+position = Vector3(0.25, -0.2, -0.2)
+mesh = ExtResource("1_m4umm")
+metadata/_custom_type_script = "uid://c0afljd65dkhp"

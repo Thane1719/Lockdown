@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 
 #const SPEED = 300.0
-@export var SPEED: float = 400.0
+@export var SPEED: float = 300.0
 const JUMP_VELOCITY = -400.0
 var screen_size: Vector2
 
@@ -14,11 +14,10 @@ func ready():
 
 func _physics_process(delta: float) -> void:
 	var direction = Input.get_vector("left", "right", "forward", "backward")
-	velocity = direction * SPEED
 	if direction:
-		velocity = direction * SPEED
+		velocity = lerp(velocity, direction * SPEED, 0.2)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity = lerp(velocity, Vector2(0,0), 0.2)
 	
 	move_and_slide()
 

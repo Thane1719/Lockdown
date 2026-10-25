@@ -11,12 +11,14 @@ extends PlayerMovementState
 # Called when the node enters the scene tree for the first time.
 func enter(previousState) -> void:
 	PLAYER.velocity.y += jumpVelocity
+	PLAYER.stamina -= 5
 	animation.pause()
 
 func update(delta):
 	PLAYER.updateGravity(delta)
 	#Can be used for boost jumping (MOVEMENT GAME YEAHHH)
-	PLAYER.updateInput(PLAYER.velocity.length() + speed * inputMultiplier, acceleration, deceleration)
+	#PLAYER.updateInput(PLAYER.velocity.length() + speed * inputMultiplier, acceleration, deceleration)
+	PLAYER.updateInput(PLAYER.velocity.length(), acceleration, deceleration)
 	PLAYER.updateVelocity()
 	weapon.sway_weapon(delta, false)
 	
@@ -26,11 +28,5 @@ func update(delta):
 	if PLAYER.is_on_floor():
 		transition.emit("IdlePlayerState")
 		
-	if Input.is_action_just_pressed("crouch") and !PLAYER.is_on_floor():
-		transition.emit("SlammingPlayerState")
-		
 	if Input.is_action_just_pressed("shoot"):
 		weapon.shoot()
-
-	if Input.is_action_just_pressed("sprint") and PLAYER.stamina >= 33:
-		transition.emit("DashingPlayerState")

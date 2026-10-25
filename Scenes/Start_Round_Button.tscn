@@ -1,11 +1,18 @@
 [gd_scene format=3 uid="uid://cx1gaprr1a6j0"]
 
 [ext_resource type="Script" uid="uid://daadx55kvtrv4" path="res://Scripts/start_round_button.gd" id="1_tdcxo"]
+[ext_resource type="Material" uid="uid://b3pgvj3gutf65" path="res://Materials/Dev material 4.tres" id="2_t3otq"]
+[ext_resource type="Material" uid="uid://cujy07kmfpudl" path="res://Materials/Dev material 3.tres" id="3_mi15o"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_eqax0"]
 top_radius = 0.2
 bottom_radius = 0.25
 height = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tdcxo"]
+top_radius = 0.1
+bottom_radius = 0.15
+height = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xpc2p"]
 size = Vector3(0.5, 1, 0.5)
@@ -17,7 +24,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_tdcxo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=585807985]
+material_override = ExtResource("2_t3otq")
 mesh = SubResource("CylinderMesh_eqax0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=775939778]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4449365, 0)
+material_override = ExtResource("3_mi15o")
+mesh = SubResource("CylinderMesh_tdcxo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=327546367]
 shape = SubResource("BoxShape3D_xpc2p")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1089700986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+billboard = 1
+text = "Start round"

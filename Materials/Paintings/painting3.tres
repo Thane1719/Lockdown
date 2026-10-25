@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dq4ok7yrw4r3i"]
+
+[ext_resource type="Texture2D" uid="uid://dqlaeur8aj03g" path="res://Materials/Paintings/A Concrete Place.png" id="1_rndtw"]
+
+[resource]
+resource_name = "Painting Image"
+cull_mode = 2
+albedo_texture = ExtResource("1_rndtw")
+roughness = 0.5
+uv1_scale = Vector3(1.35, 1.02, 1)
+uv1_offset = Vector3(-0.105, 0, 0)

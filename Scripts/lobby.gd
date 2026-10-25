@@ -10,8 +10,10 @@ const NAME_MENU_SCENE_PATH: String = "res://name_menu.tscn"
 @onready var address_entry = $CanvasLayer/MainMenu/PanelContainer/VBoxContainer/AddressEntry
 @onready var hud = $UserInterface
 @onready var loading = $CanvasLayer/Loading
+@onready var myIDref = multiplayer.get_unique_id()
 @onready var menuMusicNode = $CanvasLayer/MenuMusic
 @onready var menuBackground = $"CanvasLayer/Menu Background"
+@onready var ipLabel = $"UserInterface/IP Label"
 
 @onready var GUI = $GUIwindow
 @onready var GUI_viewport = %SubViewport
@@ -29,6 +31,13 @@ const NAME_MENU_SCENE_PATH: String = "res://name_menu.tscn"
 @onready var money = $%moneyLabel
 
 @onready var menu_background = $MenuBackground
+@export var terminalDoor: Node3D
+@export var copsSpectateLocation : Marker3D
+@export var robbersSpectateLocation : Marker3D
+@export var mapName : String
+
+var tracked = false
+var player
 
 @onready var menu_music = $MenuMusic
 
@@ -37,6 +46,42 @@ var myIDref: int
 
 var tracked: bool = false
 var player: Node = null
+func get_lan_ip() -> String:
+	var addresses = IP.get_local_addresses()
+	var valid_ips: Array[String] = []
+	
+	for ip in addresses:
+		# Skip IPv6 and Loopback (localhost)
+		if ip.contains(":") or ip.begins_with("127."):
+			continue
+			
+		# Skip known virtual adapter IPs (VirtualBox, Docker, WSL, Windows Hotspot)
+		if ip.begins_with("192.168.56."): continue # VirtualBox Host-Only
+		if ip.begins_with("10.0.2."): continue # VirtualBox NAT
+		if ip.begins_with("172.17.") or ip.begins_with("172.18.") or ip.begins_with("172.19.") or ip.begins_with("172.20."): continue # Docker / WSL
+		if ip == "192.168.137.1": continue # Windows Mobile Hotspot
+		
+		# Filter for common private IPv4 ranges
+		if ip.begins_with("192.168.") or ip.begins_with("10.") or ip.begins_with("172."):
+			if ip not in valid_ips:
+				valid_ips.append(ip)
+
+	if valid_ips.is_empty():
+		# Fallback to any active IPv4 address if the first pass fails
+		for ip in addresses:
+			if not ip.contains(":") and not ip.begins_with("127."):
+				if ip not in valid_ips:
+					valid_ips.append(ip)
+					
+	if valid_ips.is_empty():
+		return "Offline"
+	
+	# Return all found IPs separated by a newline. 
+	# The Label node will automatically display these on multiple lines!
+	return "\n".join(valid_ips)
+
+
+func _on_host_button_pressed():
 
 var teams: Dictionary = {}
 var playercount: int = 0
@@ -125,6 +170,7 @@ func host_game() -> void:
 	print("Maximum players: ", MAX_PLAYERS)
 
 	loading.visible = false
+	Global.roundReset.emit()
 
 
 func join_game() -> void:
@@ -136,6 +182,14 @@ func join_game() -> void:
 		address = "127.0.0.1"
 
 	var error = peer.create_client(address, PORT)
+	var error
+	# Trim any accidental spaces the user might have typed
+	var target_ip = address_entry.text.strip_edges()
+	
+	if target_ip == "":
+		error = enet_peer.create_client("127.0.0.1", PORT)
+	else:
+		error = enet_peer.create_client(target_ip, PORT)
 
 	if error != OK:
 		print("Failed to create client: ", error)
@@ -156,6 +210,22 @@ func join_game() -> void:
 
 func _on_server_disconnected() -> void:
 	print("Disconnected from the server.")
+	multiplayer.multiplayer_peer = enet_peer
+	
+	# Add signals for better debugging
+	multiplayer.connected_to_server.connect(_on_client_connected)
+	multiplayer.connection_failed.connect(_on_client_failed)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
+	Global.joinButtonPressed.emit()
+
+func _on_client_connected():
+	print("Successfully connected to the server!")
+
+func _on_client_failed():
+	print("Failed to connect to server. Check IP and Firewall.")
+
+func _on_server_disconnected():
+	print("Lost connection to the server.")
 
 
 func _ready() -> void:
@@ -169,6 +239,7 @@ func _ready() -> void:
 	Global.pointsLabel = %TotalValue
 	Global.healthLabel = %Health
 
+	Global.staminaBar = %"Stamina Bar"
 	Global.totalValue = 0
 
 	GUI.hide()
@@ -180,10 +251,34 @@ func _ready() -> void:
 	Global.respawnPlayers()
 
 	update_money_display()
+	
 
 	# Host or join after returning from the Name Menu.
 	if Global.should_host:
 		Global.should_host = false
+	var lan_ip = get_lan_ip()
+	ipLabel.text = "My IP:\n" + lan_ip
+	ipLabel.show()
+
+	if Global.cameFromGame == true:
+		Global.cameFromGame = false
+		if multiplayer.get_unique_id() == 1:
+			rpc("resetRound")
+		hideMainMenu()
+		hud.show()
+		weaponGlobal.weaponAmmoInventory = [[0,0], [0,0]]
+		weaponGlobal.weaponInventory = ["res://Weapons/Empty Weapon.tres","res://Weapons/Empty Weapon.tres"]
+		Global.weaponManager.loadWeapon()
+		Global.weaponManager.addWeapon("res://Weapons/Blaster.tres", true, 0, 0)
+		return
+	resetRound()
+
+func _process(delta: float) -> void:
+	Global.playerHealth = 100
+	
+	#var DebugPanel = debWin.instantiate()
+	#add_child(DebugPanel)
+	#DebugPanel.visible = true
 
 		main_menu.hide()
 		hud.show()
@@ -279,6 +374,9 @@ func remove_player(peer_id: int) -> void:
 
 	if teams.has(peer_id):
 		teams.erase(peer_id)
+	# Remove them from the team dictionary
+	if Global.teams.has(peer_id):
+		Global.teams.erase(peer_id)
 
 	playercount = max(playercount - 1, 0)
 
@@ -290,6 +388,7 @@ func remove_player(peer_id: int) -> void:
 func _on_single_player_button_pressed() -> void:
 	main_menu.hide()
 	menuBackground.hide()
+	hideMainMenu()
 	hud.show()
 
 	menuMusicNode.stop()
@@ -298,6 +397,8 @@ func _on_single_player_button_pressed() -> void:
 
 
 
+
+func assign_team(id):
 
 func assign_team(id: int) -> void:
 	if not multiplayer.is_server():
@@ -310,12 +411,17 @@ func assign_team(id: int) -> void:
 
 	for team_name in teams.values():
 		if team_name == "Cop":
+	for t in Global.teams.values():
+
+		if t == "Cop":
 			Global.cop_count += 1
-			Global.aliveCopCount += 1
+			if multiplayer.get_unique_id() == 1:
+				Global.aliveCopCount += 1
 
 		elif team_name == "Robber":
 			Global.robber_count += 1
-			Global.aliveRobberCount += 1
+			if multiplayer.get_unique_id() == 1:
+				Global.aliveRobberCount += 1
 
 	var team: String
 
@@ -891,7 +997,7 @@ func assign_team(id: int) -> void:
 	else:
 		team = "Cop" if randi() % 2 == 0 else "Robber"
 
-	teams[id] = team
+	Global.teams[id] = team
 
 	print("Player ", id, " assigned to ", team)
 
@@ -944,6 +1050,11 @@ func spawn_player(id: int, team: String) -> void:
 @rpc("authority", "call_local", "reliable")
 func receive_team_assignment(id: int, team: String) -> void:
 	teams[id] = team
+
+@rpc("any_peer", "reliable")
+func receive_team_assignment(id, team):
+
+	Global.teams[id] = team
 
 	if id == multiplayer.get_unique_id():
 		Global.myCurrentTeam = team
@@ -1052,11 +1163,20 @@ func swap_to_new_instance() -> void:
 
 
 func showAnnounceText(text: String) -> void:
+func _on_exit_game_pressed() -> void:
+
+	get_tree().quit()
+
+
+@rpc("any_peer", "call_local")
+func showAnnounceText(text : String, duration : int):
 	var announceBox = $"UserInterface/Spawn Text"
 	var announceLabel = %AnnounceLabel
 
 	announceLabel.text = text
 	announceBox.show()
+	await get_tree().create_timer(duration).timeout
+	announceBox.hide()
 
 	await get_tree().create_timer(3.0).timeout
 
@@ -1093,6 +1213,73 @@ func recieveReset() -> void:
 	Global.respawnPlayers()
 
 	trapSetupMode = true
+		Global.player.trapInstance = null
+		Global.player.loadedTrap = null
+		Global.player.hasInstancedTrap = false
+		Global.respawnPlayers()
+		weaponGlobal.weaponAmmoInventory = [[0,0], [0,0]]
+		weaponGlobal.weaponInventory = ["res://Weapons/Empty Weapon.tres","res://Weapons/Empty Weapon.tres"]
+		Global.weaponManager.loadWeapon()
+		Global.weaponManager.addWeapon("res://Weapons/Blaster.tres", true, 0, 0)
+
+
+@rpc("reliable", "any_peer", "call_local")
+func resetRound():
+	totalItems = 0
+	Global.roundReset.emit()
+	Global.respawnPlayers()
+	trapSetupMode = true
+	weaponGlobal.weaponAmmoInventory = [[0,0], [0,0]]
+	weaponGlobal.weaponInventory = ["res://Weapons/Empty Weapon.tres","res://Weapons/Empty Weapon.tres"]
+	if Global.weaponManager:
+		Global.weaponManager.loadWeapon()
+		Global.weaponManager.addWeapon("res://Weapons/Blaster.tres", true, 0, 0)
+	if Global.myCurrentTeam == "Cop":
+		showAnnounceText("Trap setup mode", 3)
+		await get_tree().create_timer(3.0).timeout
+		showAnnounceText("Place your traps and ready yourselves", 4)
+	else:
+		showAnnounceText("Round setup", 3)
+		await get_tree().create_timer(3.0).timeout
+		showAnnounceText("Plan your attack!", 4)
+
+@rpc("reliable", "call_local", "any_peer")
+func updateAlivePlayers(team):
+	if multiplayer.get_unique_id() == 1:
+		if team == "Cop":
+			Global.aliveCopCount -= 1
+		elif team == "Robber":
+			Global.aliveRobberCount -= 1
+		
+		if Global.aliveCopCount <= 0:
+			rpc("showAnnounceText", "Robbers have won", 3)
+			Global.robberWins += 1
+			await get_tree().create_timer(3.0).timeout
+			if Global.robberWins >= 3:
+				Global.rpc("changeScene", "res://Scenes/lobby.tscn")
+				Global.changeScene("res://Scenes/lobby.tscn")
+				return
+			recalculateTeamNumbers()
+			rpc("resetRound")
+		elif Global.aliveRobberCount <= 0:
+			rpc("showAnnounceText", "Cops have won", 3)
+			Global.copWins += 1
+			await get_tree().create_timer(3.0).timeout
+			if Global.copWins >= 3:
+				Global.rpc("changeScene", "res://Scenes/lobby.tscn")
+				Global.changeScene("res://Scenes/lobby.tscn")
+				return
+			recalculateTeamNumbers()
+			rpc("resetRound")
+
+func recalculateTeamNumbers():
+	Global.aliveCopCount = 0
+	Global.aliveRobberCount = 0
+	for t in Global.teams.values():
+		if t == "Cop":
+			Global.aliveCopCount += 1
+		elif t == "Robber":
+			Global.aliveRobberCount += 1
 
 	if Global.myCurrentTeam == "Cop":
 		showAnnounceText("Trap setup mode")
@@ -1125,7 +1312,6 @@ func updateAlivePlayers(team: String) -> void:
 
 func hideMainMenu() -> void:
 	menuMusicNode.playing = false
-	loading.visible = true
 	menuBackground.visible = false
 	main_menu.hide()
 

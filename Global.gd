@@ -5,6 +5,10 @@ extends Node
 signal roundReset
 @warning_ignore("unused_signal")
 signal playerJoined
+@warning_ignore("unused_signal")
+signal playerWonTask
+@warning_ignore("unused_signal")
+signal joinButtonPressed
 
 var player
 var playerPoints = 0:
@@ -13,8 +17,8 @@ var playerPoints = 0:
 		updatePoints()
 var playerHealth = 100:
 	set(value):
-		healthLabel.text = str(value)
 		playerHealth = value
+		healthLabel.text = str(value) + " HP"
 var playerCamera
 var debug
 var weaponManager
@@ -22,6 +26,7 @@ var reserveLabel : Label
 var clipLabel : Label
 var pointsLabel : Label
 var healthLabel: Label
+var staminaBar : ProgressBar
 var interactionLabel: Label
 var isPaused = false
 var myCurrentTeam : String
@@ -45,6 +50,12 @@ var name_entered: bool = false
 var skip_lobbymenu: bool = false
 var server_address: String = "127.0.0.1"
 
+var teams = {} # peer_id -> "Cop" or "Robber"
+
+var copWins = 0
+var robberWins = 0
+
+var cameFromGame = false
 
 func updateLabels(clipAmmo, reserveAmmo):
 	clipLabel.text = str(clipAmmo)

@@ -21,11 +21,12 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			if Global.myCurrentTeam == "Robber":
 				Global.updatePoints()
 			if get_tree().current_scene.totalItems == itemCount:
-				get_tree().current_scene.totalItems = 0
-				get_tree().current_scene.resetRound()
 				var bodies = area3D.get_overlapping_bodies()
 				for i in bodies:
 					i.queue_free()
+				get_tree().root.get_node("World").totalItems = 0
+				get_tree().root.get_node("World").rpc("resetRound")
+
 
 
 func _on_area_3d_body_exited(body: Node3D) -> void:

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bpuj585v7bv3n"]
+
+[ext_resource type="Script" uid="uid://cxgi0sfpxnchf" path="res://Scripts/Damage Particle.gd" id="1_ogrdj"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_14pre"]
+lifetime_randomness = 1.0
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_max = 10.0
+scale_min = 0.1
+scale_max = 0.5
+color = Color(0.766808, 0.344276, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_un623"]
+albedo_color = Color(0.82195973, 0, 0, 1)
+albedo_texture_msdf = true
+roughness = 0.65
+emission_enabled = true
+emission = Color(0.8235294, 0, 0, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="SphereMesh" id="SphereMesh_4jcwv"]
+material = SubResource("StandardMaterial3D_un623")
+radius = 0.25
+height = 0.5
+radial_segments = 16
+rings = 8
+
+[node name="EnemyHurtEffect" type="Node3D" unique_id=2082609574]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=990501945]
+emitting = false
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+process_material = SubResource("ParticleProcessMaterial_14pre")
+draw_pass_1 = SubResource("SphereMesh_4jcwv")
+script = ExtResource("1_ogrdj")
+
+[connection signal="finished" from="GPUParticles3D" to="GPUParticles3D" method="_on_finished"]

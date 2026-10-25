@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bbpl7ilw1bxti"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xr57o"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_21ahh"]
+width = 867
+height = 666
+noise = SubResource("FastNoiseLite_xr57o")
+
+[resource]
+albedo_color = Color(0.5640942, 0.57488686, 0.5763361, 1)
+metallic = 0.67
+metallic_specular = 0.2
+roughness = 0.57
+normal_texture = SubResource("NoiseTexture2D_21ahh")

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Weapons" format=3 uid="uid://cii6ykbnpdywf"]
+
+[ext_resource type="ArrayMesh" uid="uid://bbhye0cuqnadh" path="res://Items/Item Models/Itemsglb_Amythest.res" id="1_nple3"]
+[ext_resource type="Script" uid="uid://c0afljd65dkhp" path="res://Weapons/Weapons.gd" id="2_r32nv"]
+
+[resource]
+script = ExtResource("2_r32nv")
+name = &"Amethyst"
+Damage = 0
+weight = 3
+clip = 0
+maxClip = 0
+reserve = 0
+maxReserve = 0
+rpm = 0
+price = 150
+bulletScene = "<null>"
+position = Vector3(0.25, -0.2, -0.2)
+mesh = ExtResource("1_nple3")
+metadata/_custom_type_script = "uid://c0afljd65dkhp"

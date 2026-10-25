@@ -6,23 +6,25 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bkvtw"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hghv2"]
+properties/0/path = NodePath("Label3D:text")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Enemy" type="CharacterBody3D" unique_id=1459423324 groups=["enemy"]]
 script = ExtResource("1_phvpf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=36999291]
 mesh = SubResource("CapsuleMesh_an04p")
 
-[node name="Timer" type="Timer" parent="." unique_id=473793328]
-wait_time = 2.0
-autostart = true
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=290739019]
 shape = SubResource("CapsuleShape3D_bkvtw")
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1499599935]
 
 [node name="Label3D" type="Label3D" parent="." unique_id=250203124]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1098031, 0)
 billboard = 1
 double_sided = false
 text = "health"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1549291345]
+replication_config = SubResource("SceneReplicationConfig_hghv2")

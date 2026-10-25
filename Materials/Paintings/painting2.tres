@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c41txgyjawxxm"]
+
+[ext_resource type="Texture2D" uid="uid://bfnrv1eebf5x6" path="res://Materials/Paintings/Whiskey Bar Thing.png" id="1_ltfu0"]
+
+[resource]
+resource_name = "Painting Image"
+cull_mode = 2
+albedo_texture = ExtResource("1_ltfu0")
+roughness = 0.5
+uv1_scale = Vector3(1.19, 1, 1)
+uv1_offset = Vector3(-0.055, 0, 0)
