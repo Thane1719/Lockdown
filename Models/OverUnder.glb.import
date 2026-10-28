@@ -47,7 +47,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cube.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cube.res",
 "save_to_file/path": "uid://cnp6lnibsu0tc"
 },
 "OverUnder_Cube_001": {
@@ -56,7 +56,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cube_001.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cube_001.res",
 "save_to_file/path": "uid://drc8cmbux1o1l"
 },
 "OverUnder_Cube_002": {
@@ -65,7 +65,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cube_002.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cube_002.res",
 "save_to_file/path": "uid://dboo8021fp3kq"
 },
 "OverUnder_Cube_003": {
@@ -74,7 +74,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cube_003.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cube_003.res",
 "save_to_file/path": "uid://dchaji3n3j4my"
 },
 "OverUnder_Cylinder_001": {
@@ -83,7 +83,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cylinder_001.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cylinder_001.res",
 "save_to_file/path": "uid://b58k0m3770n1p"
 },
 "OverUnder_Cylinder_002": {
@@ -92,7 +92,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Cylinder_002.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Cylinder_002.res",
 "save_to_file/path": "uid://pyuljrc3kxxt"
 },
 "OverUnder_Plane": {
@@ -101,7 +101,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Plane.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Plane.res",
 "save_to_file/path": "uid://cfmgi7vu0w5bv"
 },
 "OverUnder_Plane_001": {
@@ -110,7 +110,7 @@ _subresources={
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Scenes/Maps/OverUnder/OverUnder_Plane_001.res",
+"save_to_file/fallback_path": "res://Maps/OverUnder/OverUnder_Plane_001.res",
 "save_to_file/path": "uid://dml8yen20mdw2"
 }
 }
