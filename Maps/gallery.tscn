@@ -1024,6 +1024,18 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Quit Game"
 
+[node name="Controls" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=1635841396]
+layout_mode = 2
+text = "------------------Controls------------------
+
+Drop item: Q
+Interact / Place trap: F
+Move: WASD
+Crouch: Ctrl
+Sprint: Shift
+Shoot: Left click"
+horizontal_alignment = 1
+
 [connection signal="close_requested" from="GUIwindow" to="GUIwindow" method="_GUI_window_close"]
 [connection signal="body_entered" from="Terminal/Area3D" to="." method="_GUI_window_open"]
 [connection signal="pressed" from="PauseLayer/PausePanel/PauseVbox/ExitGame" to="." method="_on_exit_game_pressed"]

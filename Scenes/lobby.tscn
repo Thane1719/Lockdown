@@ -281,11 +281,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.357935, 2, 0)
 [node name="Marker3D" type="Marker3D" parent="SpawnPoints2/Robber" unique_id=2026920293]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.71219444)
 
+[node name="Marker3D2" type="Marker3D" parent="SpawnPoints2/Robber" unique_id=1746164094]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2878056)
+
+[node name="Marker3D3" type="Marker3D" parent="SpawnPoints2/Robber" unique_id=2049721706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7121944)
+
 [node name="Cops" type="Node3D" parent="SpawnPoints2" unique_id=183918976]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.373262, 2, 0)
 
 [node name="Marker3D" type="Marker3D" parent="SpawnPoints2/Cops" unique_id=106706201]
 transform = Transform3D(0.2774824, 0, 0.96073073, 0, 1, 0, -0.96073073, 0, 0.2774824, 2.2999992, 0, 0)
+
+[node name="Marker3D2" type="Marker3D" parent="SpawnPoints2/Cops" unique_id=1986868168]
+transform = Transform3D(0.2774824, 0, 0.96073073, 0, 1, 0, -0.96073073, 0, 0.2774824, 2.2999992, 0, 2)
+
+[node name="Marker3D3" type="Marker3D" parent="SpawnPoints2/Cops" unique_id=322909064]
+transform = Transform3D(0.2774824, 0, 0.96073073, 0, 1, 0, -0.96073073, 0, 0.2774824, 2.2999992, 0, -2)
 
 [node name="SpawnPoints" type="MultiplayerSpawner" parent="." unique_id=559373657]
 _spawnable_scenes = PackedStringArray("uid://c3ffql15mo0aj")
@@ -575,6 +587,18 @@ horizontal_alignment = 1
 [node name="ExitGame" type="Button" parent="PauseLayer/PausePanel/PauseVbox" unique_id=2046067808]
 layout_mode = 2
 text = "Quit Game"
+
+[node name="Controls" type="Label" parent="PauseLayer/PausePanel/PauseVbox" unique_id=542962427]
+layout_mode = 2
+text = "------------------Controls------------------
+
+Drop item: Q
+Interact / Place trap: F
+Move: WASD
+Crouch: Ctrl
+Sprint: Shift
+Shoot: Left click"
+horizontal_alignment = 1
 
 [node name="ItemCollectionVolume" parent="." unique_id=409276444 instance=ExtResource("13_dbplf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.173235, 2.4615893, -25.733929)
